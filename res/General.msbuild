@@ -175,6 +175,10 @@
 		<BringChanges Revert="$(IsRevert)" ServerUserName="$(ServerUsername)" ServerPassword="$(ServerPassword)" FromVersionName="$(VersionName)" RevisionIds="$(RevisionIds)" />
 	</Target>
 
+	<Target Name="Echo">
+		<Message Text="Hello World!" Importance="high"/>
+	</Target>
+
 	<Target Name="Build" DependsOnTargets="Open">
 		<BuildAll CompileMains="true" ForceRebuild="$(ForceRebuild)"/>
 	</Target>
