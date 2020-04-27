@@ -10,8 +10,7 @@ namespace common
 	{
 		string Name { get;  }
 		string Description { get;  }
-		string ProjFile { get;  }
-		string[] Targets { get; }
+		string Target { get; }
 		string[] Parameters { get; }
 	}
 }

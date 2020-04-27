@@ -13,9 +13,7 @@ namespace Build
 
 		public string Description => "Builds a Knowledge Base environment";
 
-		public string ProjFile => @"C:\code\genexus\gxcli\res\General.msbuild";
-
-		public string[] Targets => new string[] { "Build" };
+		public string Target => "Build";
 
 		public string[] Parameters => new string[] { "GX_PROGRAM_DIR", "WorkingDirectory" };
 	}

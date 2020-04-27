@@ -32,7 +32,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <GXPath>C:\code\genexus\trunk\Deploy\GeneXus\Debug</GXPath>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,6 +52,11 @@
       <Project>{175ce816-3d26-4963-8c18-4354c55804e9}</Project>
       <Name>common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Build.msbuild">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

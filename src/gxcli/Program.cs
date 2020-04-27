@@ -48,8 +48,19 @@ namespace gxcli
 				{
 					Console.WriteLine($"{t.FullName} from {t.AssemblyQualifiedName}");
 					Console.WriteLine($"IGXCliVerbProvider:{typeof(IGXCliVerbProvider).IsAssignableFrom(t)}");
+
+					if (typeof(IGXCliVerbProvider).IsAssignableFrom(t))
+					{
+						IGXCliVerbProvider obj = Activator.CreateInstance(t) as IGXCliVerbProvider;
+						ConfigProvider configProvider = new ConfigProvider(dllPath, t.FullName, obj);
+						if (!Config.Default.Providers.ContainsKey(obj.Name))
+							Config.Default.Providers.Add(obj.Name, configProvider);
+					}
+
 				}
 			}
+
+			Config.Default.Save();
 		}
 
 		static void Build()
