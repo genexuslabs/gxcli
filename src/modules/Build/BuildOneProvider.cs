@@ -7,7 +7,7 @@ using common;
 
 namespace Build
 {
-	public class BuildOne : IGXCliVerbProvider
+	public class BuildOneProvider : IGXCliVerbProvider
 	{
 		public string Name => "build-one";
 

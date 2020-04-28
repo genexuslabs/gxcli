@@ -17,7 +17,7 @@ namespace gxcli
 
 			List<ILogger> loggers = new List<ILogger>
 			{
-				new ConsoleLogger(LoggerVerbosity.Normal)
+				new ConsoleLogger(GetLoggerVerbosity(props))
 			};
 
 			props["GX_PROGRAM_DIR"] = AppDomain.CurrentDomain.BaseDirectory;
@@ -41,6 +41,31 @@ namespace gxcli
 
 			if (result.Exception != null)
 				throw result.Exception;
+		}
+
+		private static LoggerVerbosity GetLoggerVerbosity(Dictionary<string, string> props)
+		{
+			if (!props.ContainsKey("verbosity"))
+				return LoggerVerbosity.Normal;
+
+			string logger = props["verbosity"];
+			switch (logger.ToLower())
+			{
+				case "q":
+				case "quiet": 
+					return LoggerVerbosity.Quiet;
+				case "m":
+				case "minimal": 
+					return LoggerVerbosity.Minimal;
+				case "d": 
+				case "detailed": 
+					return LoggerVerbosity.Detailed;
+				case "diag":
+				case "diagnostic": 
+					return LoggerVerbosity.Diagnostic;
+				default:
+					return LoggerVerbosity.Normal;
+			}
 		}
 
 		private static void ValidateRequiredProperties(ConfigProvider provider, Dictionary<string, string> props)

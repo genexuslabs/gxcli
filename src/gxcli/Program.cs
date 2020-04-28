@@ -96,7 +96,6 @@ namespace gxcli
 				Console.WriteLine($" - {provider.Name}: {provider.Description}");
 				if (provider.Parameters.Count > 0)
 				{
-					Console.WriteLine("");
 					Console.WriteLine($"\tOptions:");
 
 					foreach (VerbParameter param in provider.Parameters)
@@ -104,6 +103,7 @@ namespace gxcli
 						Console.WriteLine($"\t -- {param.Name}{(param.Optional ? " [Optional]" : "")}: {param.Description}");
 					}
 				}
+				Console.WriteLine("");
 			}
 
 			Console.WriteLine("Global options:");
