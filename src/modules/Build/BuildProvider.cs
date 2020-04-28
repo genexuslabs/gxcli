@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using common;
 
 namespace Build
@@ -11,10 +7,16 @@ namespace Build
 	{
 		public string Name => "build-all";
 
-		public string Description => "Builds a Knowledge Base environment";
+		public string Description => "Builds a Knowledge Base environment (Build All)";
 
 		public string Target => "Build";
 
-		public string[] Parameters => new string[] { "GX_PROGRAM_DIR", "WorkingDirectory" };
+		public List<VerbParameter> Parameters => new List<VerbParameter> 
+		{
+			new VerbParameter { Name = "WorkingDirectory", Description = "Path to the Knowledge Base directory"},
+			new VerbParameter { Name = "WorkingVersion", Description = "Name of the Knowledge Base version to build", Optional = true},
+			new VerbParameter { Name = "WorkingEnvironment", Description = "Name of the Environment to build", Optional = true},
+			new VerbParameter { Name = "ForceRebuild", Description = "Forces a ReBuild", Optional = true},
+		};
 	}
 }

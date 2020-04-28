@@ -60,6 +60,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(GXPath)\gxclimodules</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetPath) $(GXPath)\gxclimodules
+copy $(TargetDir)\$(TargetName).msbuild $(GXPath)\gxclimodules</PostBuildEvent>
   </PropertyGroup>
 </Project>

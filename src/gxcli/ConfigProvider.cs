@@ -1,9 +1,12 @@
-﻿using common;
+﻿using System.Collections.Generic;
+using common;
 
 namespace gxcli
 {
 	public class ConfigProvider : IGXCliVerbProvider
 	{
+		public ConfigProvider() { }
+
 		public ConfigProvider(string assemblyPath, string classImplmentation, IGXCliVerbProvider provider)
 		{
 			AssemblyLocation = assemblyPath;
@@ -14,13 +17,13 @@ namespace gxcli
 			Parameters = provider.Parameters;
 		}
 
-		public string Name { get; private set; }
+		public string Name { get; set; }
 
-		public string Description { get; private set; }
+		public string Description { get; set; }
 
-		public string Target { get; private set; }
+		public string Target { get; set; }
 
-		public string[] Parameters { get; private set; }
+		public List<VerbParameter> Parameters { get; private set; } = new List<VerbParameter>();
 
 		public string AssemblyLocation { get; set; }
 

@@ -37,9 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- GeneXus References -->
-    <Reference Include="CommandLine, Version=2.7.82.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\CommandLineParser.2.7.82\lib\net461\CommandLine.dll</HintPath>
-    </Reference>
     <Reference Include="Genexus.MsBuild.Tasks">
       <HintPath>$(GXPath)\Genexus.MsBuild.Tasks.dll</HintPath>
       <Private>False</Private>
@@ -110,6 +107,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildRunner.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ConfigProvider.cs" />
     <Compile Include="Program.cs" />
@@ -132,7 +130,6 @@ copy $(TargetDir)\Microsoft.Build.Framework.dll $(GXPath)
 copy $(TargetDir)\Microsoft.Build.dll $(GXPath)
 copy $(TargetDir)\System.Threading.Tasks.Dataflow.dll $(GXPath)
 copy $(TargetDir)\System.Collections.Immutable.dll $(GXPath)
-copy $(TargetDir)\CommandLine.dll $(GXPath)
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
