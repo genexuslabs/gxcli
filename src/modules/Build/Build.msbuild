@@ -183,6 +183,10 @@
 		<BuildAll CompileMains="true" ForceRebuild="$(ForceRebuild)"/>
 	</Target>
 
+	<Target Name="BuildOne" DependsOnTargets="Open">
+		<BuildOne BuildCalled="true" ObjectName="$(ObjectName)"/>
+	</Target>
+
 	<Target Name="RunTests" DependsOnTargets="Open">
 		<UpdateTestRefs ExecutionDataFilePath="$(ExecutionDataFilePath)" ServerUserName="$(ServerUsername)" ServerPassword="$(ServerPassword)"/>
 		<BuildOne BuildCalled="true" ObjectName="$(TestRunner)"/>

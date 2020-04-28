@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,7 +67,7 @@ namespace gxcli
 
 		private static Dictionary<string, string> ParseArguments(string[] args)
 		{
-			Dictionary<string, string> parsed = new Dictionary<string, string>();
+			Dictionary<string, string> parsed = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 			foreach (string item in args)
 			{
 				if (!item.Contains("="))
