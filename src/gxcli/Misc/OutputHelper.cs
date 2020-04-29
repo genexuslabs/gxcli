@@ -77,6 +77,9 @@ namespace gxcli.Misc
 			Console.WriteLine("");
 		}
 
+		/// <summary>
+		/// http://patorjk.com/software/taag/#p=display&f=Big&t=GeneXus
+		/// </summary>
 		public static string GeneXusLogo = @"
    ____               ___  __         
   / ___| ___ _ __   ___\ \/ /   _ ___ 
@@ -88,7 +91,8 @@ namespace gxcli.Misc
 		public static void PrintGlobalOptions()
 		{
 			Console.WriteLine("Global options:");
-			Console.WriteLine(GetHelpLine("verbosity", "quiet|minimal|normal(default)|detailed|diagnostic"));
+			foreach (GlobalOption gOption in GlobalOption.GetAll())
+				Console.WriteLine(GetHelpLine(gOption.Name, gOption.Description));
 		}
 
 		private static string GetHelpLine(string name, string description, bool special = false)
