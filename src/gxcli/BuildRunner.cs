@@ -72,7 +72,7 @@ namespace gxcli
 		{
 			foreach (VerbParameter param in provider.Parameters)
 			{
-				if (!param.Optional && !props.ContainsKey(param.Name))
+				if (param.Required && !props.ContainsKey(param.Name))
 					throw new MissingFieldException($"Missing required parameter:{param.Name}");
 			}
 		}

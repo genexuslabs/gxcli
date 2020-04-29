@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using common;
-using gxcli.common;
-using Microsoft.Build.Evaluation;
-using Microsoft.Build.Execution;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Logging;
+using gxcli.Misc;
 
 namespace gxcli
 {
@@ -19,6 +8,8 @@ namespace gxcli
 	{
 		const string INSTALL = "install";
 		const string HELP = "help";
+		const string VERSION = "version";
+		
 
 		static void Main(string[] args)
 		{
@@ -26,20 +17,25 @@ namespace gxcli
 			{
 				if (args.Length == 0)
 				{
-					ShowUsage();
+					OutputHelper.PrintHeader();
+					OutputHelper.ShowUsage();
 					return;
 				}
 
 				string verb = args[0];
 				if (verb.Equals(INSTALL, StringComparison.InvariantCultureIgnoreCase))
 				{
-					PrintHeader();
 					Config.Install();
 					return;
 				}
 				if (verb.Equals(HELP, StringComparison.InvariantCultureIgnoreCase))
 				{
-					ShowUsage();
+					OutputHelper.ShowUsage();
+					return;
+				}
+				if (verb.Equals(VERSION, StringComparison.InvariantCultureIgnoreCase))
+				{
+					OutputHelper.PrintHeader();
 					return;
 				}
 
@@ -47,6 +43,12 @@ namespace gxcli
 
 				if (Config.Default.Providers.ContainsKey(verb.ToLower()))
 				{
+					if (options.ContainsKey(HELP))
+					{
+						OutputHelper.ShowUsage(verb);
+						return;
+					}
+
 					ConfigProvider provider = Config.Default.Providers[verb.ToLower()];
 					BuildRunner.Execute(provider, options);
 					return;
@@ -57,9 +59,15 @@ namespace gxcli
 			{
 				Console.WriteLine(ex.Message);
 				Exception inner = ex.InnerException;
+#if DEBUG
+				Console.WriteLine(ex.StackTrace);
+#endif
 				while (inner != null)
 				{
 					Console.WriteLine(inner.Message);
+#if DEBUG
+					Console.WriteLine(inner.StackTrace);
+#endif
 					inner = inner.InnerException;
 				}
 			}
@@ -71,7 +79,10 @@ namespace gxcli
 			foreach (string item in args)
 			{
 				if (!item.Contains("="))
+				{
+					parsed[item.ToLower()] = "true";
 					continue;
+				}
 
 				string[] keyVal = item.Split(new[] {'='});
 				if (keyVal.Length != 2)
@@ -82,50 +93,5 @@ namespace gxcli
 
 			return parsed;
 		}
-
-		private static void ShowUsage()
-		{
-			PrintHeader();
-
-			Console.WriteLine("Usage: gx [verb] [options] [global options]");
-			Console.WriteLine("");
-			Console.WriteLine("Verbs:");
-			foreach (string verb in Config.Default.Providers.Keys)
-			{
-				ConfigProvider provider = Config.Default.Providers[verb];
-				Console.WriteLine($" - {provider.Name}: {provider.Description}");
-				if (provider.Parameters.Count > 0)
-				{
-					Console.WriteLine($"\tOptions:");
-
-					foreach (VerbParameter param in provider.Parameters)
-					{
-						Console.WriteLine($"\t -- {param.Name}{(param.Optional ? " [Optional]" : "")}: {param.Description}");
-					}
-				}
-				Console.WriteLine("");
-			}
-
-			Console.WriteLine("Global options:");
-			Console.WriteLine("- verbosity: quiet|minimal|normal(default)|detailed|diagnostic");
-		}
-
-		private static void PrintHeader()
-		{
-			Assembly assembly = Assembly.GetEntryAssembly();
-			IEnumerable<Attribute> assemblyAtt = assembly.GetCustomAttributes(typeof(AssemblyTitleAttribute));
-			IEnumerable<Attribute> assemblyCop = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute));
-			string title = ((AssemblyTitleAttribute)assemblyAtt.First()).Title;
-			string copyRight = ((AssemblyCopyrightAttribute)assemblyCop.First()).Copyright;
-			string version = assembly.GetName().Version.ToString();
-
-			Console.WriteLine($"{title} version {version}");
-			Console.WriteLine(copyRight);
-			Console.WriteLine("");
-		}
-
-		
-
-		
 	}
 }

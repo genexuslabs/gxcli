@@ -110,6 +110,7 @@
     <Compile Include="BuildRunner.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ConfigProvider.cs" />
+    <Compile Include="Misc\OutputHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -123,6 +124,7 @@
       <Name>common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy $(TargetDir)\$(TargetName)*.* $(GXPath)

@@ -15,6 +15,7 @@ namespace gxcli
 			Description = provider.Description;
 			Target = provider.Target;
 			Parameters = provider.Parameters;
+			Examples = provider.Examples;
 		}
 
 		public string Name { get; set; }
@@ -24,6 +25,8 @@ namespace gxcli
 		public string Target { get; set; }
 
 		public List<VerbParameter> Parameters { get; private set; } = new List<VerbParameter>();
+
+		public List<Example> Examples { get; private set; } = new List<Example>();
 
 		public string AssemblyLocation { get; set; }
 

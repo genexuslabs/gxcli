@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E4D95147-B6A2-45BF-9B8E-D4BE15162E4D}</ProjectGuid>
+    <ProjectGuid>{2EFEEC33-49BC-4EE4-A06D-E68634565C60}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Build</RootNamespace>
-    <AssemblyName>Build</AssemblyName>
+    <RootNamespace>TeamDev</RootNamespace>
+    <AssemblyName>TeamDev</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -30,9 +30,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <GXPath>C:\code\genexus\trunk\Deploy\GeneXus\Debug</GXPath>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,9 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildOneProvider.cs" />
-    <Compile Include="BuildProvider.cs" />
+    <Compile Include="UpdateProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TeamDev.msbuild">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\common\common.csproj">
@@ -54,14 +55,5 @@
       <Name>common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Build.msbuild">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(GXPath)\gxclimodules
-copy $(TargetDir)\$(TargetName).msbuild $(GXPath)\gxclimodules</PostBuildEvent>
-  </PropertyGroup>
 </Project>
