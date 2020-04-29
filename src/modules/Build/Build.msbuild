@@ -4,350 +4,51 @@
 	<Import Project="$(GX_PROGRAM_DIR)\Genexus.Server.Tasks.targets"/>
 	<Import Project="$(GX_PROGRAM_DIR)\GeneXus.AWS.targets"/>
 	<Import Project="$(GX_PROGRAM_DIR)\GXtest.targets"/>
+	<Import Project="$(GX_PROGRAM_DIR)\Deploy.msbuild"/>
 	<Import Condition="Exists('$(LocalSettings)')" Project="$(LocalSettings)"/>
 
 	<PropertyGroup> <!--Input Parameters-->
 
-		<!-- Server Properties -->
-		<ServerUrl></ServerUrl>
-		<ServerUsername></ServerUsername>
-		<ServerPassword></ServerPassword>
-		<ServerKbAlias></ServerKbAlias>
-		<ServerKbVersion></ServerKbVersion>
-		<GetAllKbVersions></GetAllKbVersions>
-		<VersionName></VersionName>
-
-		<!-- Bring Changes Properties -->
-		<IsRevert></IsRevert>
-		<RevisionIds></RevisionIds>
+		<BuildCalled Condition="'$(BuildCalled)' == ''">true</BuildCalled>
+		<CompileMains Condition="'$(CompileMains)' == ''">true</CompileMains>
 
 		<!-- Working KB Properties -->
-		<WorkingDirectory></WorkingDirectory>
-		<DbaseServerInstance></DbaseServerInstance>
-		<CreateDbInKbFolder></CreateDbInKbFolder>
-		<DbaseUseIntegratedSecurity></DbaseUseIntegratedSecurity>
-		<DbaseServerUsername></DbaseServerUsername>
-		<DbaseServerPassword></DbaseServerPassword>
-		<DbaseName></DbaseName>
-		<WorkingVersion></WorkingVersion>
-		<WorkingEnvironment></WorkingEnvironment>
+		<KBPath></KBPath>
+		<Version></Version>
+		<Environment></Environment>
 
-		<!-- Source Control Properties -->
-		<Executable></Executable>
-		<TeamDevTasks></TeamDevTasks>
-		<AutoGetSource></AutoGetSource>
-		<CleanCopy></CleanCopy>
-		<TagOnSuccess></TagOnSuccess>
-
-		<!-- Building Properties -->
-		<ForceRebuild Condition=" '$(ForceRebuild)' == '' ">false</ForceRebuild>
-		<DoImpactAnalysis Condition=" '$(DoImpactAnalysis)' == '' ">false</DoImpactAnalysis>
-		<AllowGXreorg Condition=" '$(AllowGXreorg)' == '' ">true</AllowGXreorg>
-
-		<!-- Tests Properties -->
-		<ExecutionDataFilePath>$(MSBuildThisFileDirectory)\test.json</ExecutionDataFilePath>
-		<DetailedResults>false</DetailedResults>
-		<TestRunner Condition="'$(TestRunner)' == ''">Runner</TestRunner>
-
-		<!-- Deploy Properties -->
-		<WarArtifacts></WarArtifacts>
-		<EBExtensionFolder></EBExtensionFolder>
-		<ZipBundleBasePath></ZipBundleBasePath>
-		<ZipApplicationBundle></ZipApplicationBundle>
-		<AWSEB_PROFILE_NAME></AWSEB_PROFILE_NAME>
-		<AWSEB_ACCESS_KEY_ID></AWSEB_ACCESS_KEY_ID>
-		<AWSEB_SECRET_ACCESS_KEY></AWSEB_SECRET_ACCESS_KEY>
-		<AWSEB_DEFAULT_REGION></AWSEB_DEFAULT_REGION>
-		<AWSEB_APPLICATION_NAME></AWSEB_APPLICATION_NAME>
-		<AWSEB_APPLICATION_VERSION></AWSEB_APPLICATION_VERSION>
-		<AWSEB_ENVIRONMENT_NAME></AWSEB_ENVIRONMENT_NAME>
-		<LANGUAGE></LANGUAGE>
-
-		<!-- Tools Properties -->
-		<ToolsPath>$(MSBuildThisFileDirectory)..\Deploy\scripts</ToolsPath>
-		<ConverSQLTool>$(ToolsPath)\ConvertToSQLscript.bat</ConverSQLTool>
 	</PropertyGroup>
 
-	<Target Name="SetLocalProperties">
-		<SetVersionProperty Condition="'@(VersionProperty)' != ''" Name="%(VersionProperty.Identity)" Value="%(VersionProperty.Value)" />
-		<SetEnvironmentProperty Condition="'@(EnvironmentProperty)' != ''" Name="%(EnvironmentProperty.Identity)" Value="%(EnvironmentProperty.Value)" />
-		<SetGeneratorProperty Condition="'@(GeneratorProperty)' != ''" Generator="%(GeneratorProperty.Generator)" Name="%(GeneratorProperty.PropertyName)" Value="%(GeneratorProperty.PropertyValue)" />
-		<SetDataStoreProperty Condition="'@(DataStoreProperty)' != ''" Datastore="%(DataStoreProperty.DataStore)" Name="%(DataStoreProperty.PropertyName)" Value="%(DataStoreProperty.PropertyValue)" />
+	<Target Name="SelectVersion" Condition="'$(Version)'!=''" >
+		<SetActiveVersion VersionName="$(Version)"  />
 	</Target>
 
-	<Target Name="CreateKB">
-		<Error Condition="'$(WorkingDirectory)'==''" Text="WorkingDirectory cannot be null" />
-		<Message Text="CreateKBfromServer Directory=$(WorkingDirectory)" />
-		<CreateKnowledgeBaseFromServer
-			Directory="$(WorkingDirectory)"
-			CreateDbInKbFolder="$(CreateDbInKbFolder)"
-			DBName="$(DbaseName)"
-			IntegratedSecurity="$(DbaseUseIntegratedSecurity)"
-			UserId="$(DbaseServerUsername)"
-			Password="$(DbaseServerPassword)"
-			ServerUri="$(ServerUrl)"
-			ServerInstance="$(DbaseServerInstance)"
-			ServerKBAlias="$(ServerKbAlias)"
-			ServerVersionName="$(ServerKbVersion)"
-			ServerUserName="$(ServerUsername)"
-			ServerPassword="$(ServerPassword)"
-			FullKB="$(GetAllKbVersions)" />
+	<Target Name="SelectEnvironment" Condition="'$(Environment)'!=''">
+		<SetActiveEnvironment EnvironmentName="$(Environment)" />
 	</Target>
 
-	<Target Name="SelectVersion" Condition="'$(WorkingVersion)'!=''" >
-		<SetActiveVersion VersionName="$(WorkingVersion)"  />
-	</Target>
-
-	<Target Name="SelectEnvironment" Condition="'$(WorkingEnvironment)'!=''">
-		<SetActiveEnvironment EnvironmentName="$(WorkingEnvironment)" />
-	</Target>
-
-	<Target Name="OpenKB">
-		<Error Condition="'$(WorkingDirectory)'==''" Text="WorkingDirectory cannot be null" />
-		<Message Text="OpenKnowledgeBase Directory=$(WorkingDirectory)" />
+	<Target Name="OpenWorkingKB">
 		<OpenKnowledgeBase
-			DatabaseUser="$(DbaseServerUsername)"
-			DatabasePassword="$(DbaseServerPassword)"
-			Directory="$(WorkingDirectory)"/>
+					Directory = "$(KBPath)"
+					DatabaseUser="$(DbaseServerUsername)"
+					DatabasePassword="$(DbaseServerPassword)"/>
 	</Target>
 
-	<Target Name="OpenWorkingKB" DependsOnTargets="SafeOpen" />
-
-	<Target Name="SafeOpen" DependsOnTargets="CheckKb;OpenOrCreate"/>
-
-	<Target Name="CheckKb">
-		<Error Condition="'$(WorkingDirectory)'==''" Text="WorkingDirectory cannot be null" />
-		<ItemGroup>
-			<GxwFile Include="$(WorkingDirectory)\*.gxw" />
-		</ItemGroup>
-		<Message Text='Checking KB at "$(WorkingDirectory)"' />
-		<Message Text="%(GxwFile.Identity)" />
-
-		<PropertyGroup>
-			<KbAlreadyExisted Condition=" '@(GxwFile)' != '' " >true</KbAlreadyExisted>
-			<KbAlreadyExisted Condition=" '@(GxwFile)' == '' " >false</KbAlreadyExisted>
-		</PropertyGroup>
-
-		<Message Text="   already exists" Condition=" '$(KBAlreadyExisted)' == 'true' " />
-		<Message Text="   does not exist" Condition=" '$(KBAlreadyExisted)' != 'true' " />
-	</Target>
-
-	<Target Name="OpenOrCreate" >
-		<OpenKnowledgeBase
-			Condition=" '$(KbAlreadyExisted)' == 'true' "
-			Directory = "$(WorkingDirectory)"
-			DatabaseUser="$(DbaseServerUsername)"
-			DatabasePassword="$(DbaseServerPassword)"
-		/>
-
-		<CreateKnowledgeBaseFromServer
-			Condition=" '$(KbAlreadyExisted)' != 'true' "
-			Directory="$(WorkingDirectory)"
-			CreateDbInKbFolder="$(CreateDbInKbFolder)"
-			DBName="$(DbaseName)"
-			IntegratedSecurity="$(DbaseUseIntegratedSecurity)"
-			UserId="$(DbaseServerUsername)"
-			Password="$(DbaseServerPassword)"
-			ServerUri="$(ServerUrl)"
-			ServerInstance="$(DbaseServerInstance)"
-			ServerKBAlias="$(ServerKbAlias)"
-			ServerVersionName="$(ServerKbVersion)"
-			ServerUserName="$(ServerUsername)"
-			ServerPassword="$(ServerPassword)"
-			FullKB="$(GetAllKbVersions)"
-		/>
-	</Target>
-
-	<Target Name="Open" DependsOnTargets="OpenWorkingKB;SelectVersion;SelectEnvironment;SetLocalProperties"/>
-	<Target Name="CheckOut" DependsOnTargets="CreateKB;SelectVersion;SelectEnvironment;SetLocalProperties"/>
-	<Target Name="CleanCheckOut" DependsOnTargets="CleanWorkingDirectory;CheckOut" />
-	<Target Name="CleanWorkingDirectory" DependsOnTargets="DeleteOperationalDBs;DeleteKB;CleanFolder" />
-
-	<Target Name="Update" DependsOnTargets="SafeOpen">
-		<UpdateFromServer ServerUserName="$(ServerUsername)" ServerPassword="$(ServerPassword)" />
-	</Target>
-
-	<Target Name="CreateDB" DependsOnTargets="Open">
-		<CreateDatabase ExecuteCreate="true" />
-	</Target>
-
-	<Target Name="BringChanges" DependsOnTargets="Open">
-		<BringChanges Revert="$(IsRevert)" ServerUserName="$(ServerUsername)" ServerPassword="$(ServerPassword)" FromVersionName="$(VersionName)" RevisionIds="$(RevisionIds)" />
-	</Target>
-
-	<Target Name="Echo">
-		<Message Text="Hello World!" Importance="high"/>
-	</Target>
+	<Target Name="Open" DependsOnTargets="OpenWorkingKB;SelectVersion;SelectEnvironment"/>
 
 	<Target Name="Build" DependsOnTargets="Open">
-		<BuildAll CompileMains="true" ForceRebuild="$(ForceRebuild)"/>
+		<BuildAll CompileMains="$(CompileMains)" 
+					ForceRebuild="$(ForceRebuild)" 
+					DoNotExecuteReorg="$(DoNotExecuteReorg)" 
+					FailIfReorg="$(FailIfReorg)"
+					DetailedNavigation="$(DetailedNavigation)"/>
 	</Target>
 
 	<Target Name="BuildOne" DependsOnTargets="Open">
-		<BuildOne BuildCalled="true" ObjectName="$(ObjectName)"/>
-	</Target>
-
-	<Target Name="RunTests" DependsOnTargets="Open">
-		<UpdateTestRefs ExecutionDataFilePath="$(ExecutionDataFilePath)" ServerUserName="$(ServerUsername)" ServerPassword="$(ServerPassword)"/>
-		<BuildOne BuildCalled="true" ObjectName="$(TestRunner)"/>
-		<RunTestsList ExecutionDataFilePath="$(ExecutionDataFilePath)" DetailedResults="$(DetailedResults)" ServerUserName="$(ServerUsername)" ServerPassword="$(ServerPassword)"/>
-	</Target>
-
-	<Target Name="ImpactAnalysis" Condition="$(DoImpactAnalysis) == true" DependsOnTargets="CheckReorgRequired" >
-		<Message Text="No Reorganization needed" Condition="!$(ReorgRequired)" />
-		<CallTarget Targets="ProcessReorganization" Condition="($(ReorgRequired))" />
-	</Target>
-
-	<Target Name="PreviewReorg" DependsOnTargets="Open;ClearReorgFiles" >
-		<!-- DoNotExecuteReorg = false, otherwise it performs a Copy Model
-			 FailIfReorg = true, so that it doesn't execute it (we just want to
-				a) know whether a Reorg is needed
-				b) get the reorganization script it would execute
-		-->
-		<Reorganize DoNotExecuteReorg="false" FailIfReorg="true" ContinueOnError="true" />
-	</Target>
-
-	<Target Name="CheckReorgRequired" DependsOnTargets="PreviewReorg" >
-		<PropertyGroup>
-			<ReorgRequired Condition=" '$(ReorgRequired)' == '' ">false</ReorgRequired>
-			<ReorgRequired Condition="Exists(%(ReorganizationTXT.Identity))">true</ReorgRequired>
-		</PropertyGroup>
-	</Target>
-
-	<Target Name="ClearReorgFiles" DependsOnTargets="GetReorganizationProperties" >
-		<Message Importance="high" Text="Deleting ReorgTxt at '$(ReorgTxt)'" />
-		<Delete Files="@(ReorganizationTXT -> '%(SQLfile)');@(ReorganizationTXT)" />
-	</Target>
-
-	<Target Name="GetReorganizationProperties" DependsOnTargets="Open" >
-		<GetEnvironmentProperty Name="TargetPath">
-			<Output TaskParameter="PropertyValue" PropertyName="TargetPath"/>
-		</GetEnvironmentProperty>
-
-		<ItemGroup>
-			<ReorganizationTXT Include="$(WebTargetPath)\ReorganizationScript.txt" >
-				<SQLfile>$(WebTargetPath)\ReorganizationScript.sql</SQLfile>
-			</ReorganizationTXT>
-
-			<ReorganizationTXT Include="$(WebTargetPath)\gxrowlevelcache_ReorganizationScript.txt" >
-				<SQLfile>$(WebTargetPath)\gxrowlevelcache_ReorganizationScript.sql</SQLfile>
-			</ReorganizationTXT>
-		</ItemGroup>
-
-		<PropertyGroup>
-			<WebTargetPath>$(WorkingDirectory)\$(TargetPath)\web</WebTargetPath>
-			<ReorgTxt>$(WebTargetPath)\ReorganizationScript.txt</ReorgTxt>
-			<ReorgSQL>$(WebTargetPath)\ReorganizationScript.sql</ReorgSQL>
-		</PropertyGroup>
-
-		<Message Text="Reorganization properties --" />
-		<Message Text="WebTargetPath = $(WebTargetPath)" />
-		<Message Text="ReorgTxt      = @(ReorganizationTXT)" />
-		<Message Text="ReorgSQL      = @(ReorganizationTXT -> '%(SQLfile)')" />
-	</Target>
-
-	<Target Name="ProcessReorganization" DependsOnTargets="CaptureReorganization;TestReorganization;ExecuteReorganization" />
-
-	<Target Name="CaptureReorganization">
-		<Message Text="A Database reorganization is needed" />
-
-		<Exec Command='@type "%(ReorganizationTXT.Identity)"' />
-		<Exec Command='"$(ConverSQLTool)" "%(ReorganizationTXT.Identity)" "%(ReorganizationTXT.SQLfile)"' />
-		<Exec Command='@type "%(ReorganizationTXT.SQLfile)"' />
-	</Target>
-
-	<Target Name="TestReorganization" >
-		<!--
-		Fail if ReorgSQL includes data conversion (or make converter fail in that case)
-		Backup DB to backup.sql
-		Create DBCopy from backup.sql
-		Apply Reorg to DBCopy
-		-->
-		<Error Condition="!$(AllowGXreorg)" Text="Fail until we actually test reorganizations" />
-	</Target>
-
-	<Target Name="ExecuteReorganization" DependsOnTargets="Open" >
-		<!--
-		Apply ReorgSQL to DB (via command line .sql )
-		Mark DB as reorganized
-		-->
-		<Error Condition="!$(AllowGXreorg)" Text="Fail until we actually execute reorganizations" />
-	</Target>
-
-	<Target Name="SetSqlCmdOptions">
-		<PropertyGroup>
-			<!--SQLcmd Options-->
-			<SqlLoginUser Condition="$(DbaseServerUsername)!='' And !$(DbaseUseIntegratedSecurity)">-U $(DbaseServerUsername) </SqlLoginUser>
-			<SqlLoginPassword Condition="$(DbaseServerPassword)!='' And $(SqlLoginUser)!=''">-P $(DbaseServerPassword) </SqlLoginPassword>
-			<SqlLoginTrustedConnection Condition="$(DbaseUseIntegratedSecurity)">-E </SqlLoginTrustedConnection>
-			<SqlCmdOptions>$(SqlLoginUser)$(SqlLoginPassword)$(SqlLoginTrustedConnection)-X -b</SqlCmdOptions>
-		</PropertyGroup>
-	</Target>
-
-	<Target Name="DeleteOperationalDBs" Condition="'@(OperationalDatabase)' != ''" DependsOnTargets="SetSqlCmdOptions">
-		<Exec Command='sqlcmd $(SqlCmdOptions) -S "%(OperationalDatabase.ServerName)" -Q "IF EXISTS (SELECT name FROM sys.databases WHERE name = N%27%(OperationalDatabase.Identity)%27) ALTER DATABASE [%(OperationalDatabase.Identity)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE"' />
-		<Exec Command='sqlcmd $(SqlCmdOptions) -S "%(OperationalDatabase.ServerName)" -Q "IF EXISTS (SELECT name FROM sys.databases WHERE name = N%27%(OperationalDatabase.Identity)%27) DROP DATABASE [%(OperationalDatabase.Identity)]"' />
-	</Target>
-
-	<Target Name="DeleteKB" DependsOnTargets="GetKbDatabase;SetSqlCmdOptions">
-		<Message Text="DbaseServerInstance = $(DbaseServerInstance)" />
-		<Exec Command='sqlcmd $(SqlCmdOptions) -S "$(DbaseServerInstance)" -Q "IF EXISTS (SELECT name FROM sys.databases WHERE name = N%27$(KbDatabase)%27) ALTER DATABASE [$(KbDatabase)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE"' />
-		<Exec Command='sqlcmd $(SqlCmdOptions) -S "$(DbaseServerInstance)" -Q "IF EXISTS (SELECT name FROM sys.databases WHERE name = N%27$(KbDatabase)%27) DROP DATABASE [$(KbDatabase)]"' />
-	</Target>
-
-	<Target Name="CleanFolder">
-		<ItemGroup>
-			<ToDelete Include="$(WorkingDirectory)\*.*" />
-		</ItemGroup>
-		<Delete Files="@(ToDelete)" />
-
-		<!--This trick was taken from http://blog.coryfoy.com/2007/03/msbuild-task-to-recursively-delete-all-of-a-folders-contents/-->
-		<Exec Command='for /f "Tokens=*" %%i in (%27dir /ad /b "$(WorkingDirectory)"%27) do rd /s/q "$(WorkingDirectory)\%%i"' />
-		<Exec Command='rd /s/q "$(WorkingDirectory)"' />
-	</Target>
-
-	<Target Name="GetKbDatabase">
-		<ItemGroup>
-			<KbDirectory Include="$(WorkingDirectory)"/>
-		</ItemGroup>
-		<PropertyGroup>
-			<KbDatabase Condition="$(DbaseName)!=''">$(DbaseName)</KbDatabase>
-
-			<!--This fails when WorkingDirectory has a trailing slash, thus the error below-->
-			<KbDatabase Condition="$(DbaseName)==''">GX_KB_%(KbDirectory.filename)</KbDatabase>
-		</PropertyGroup>
-		<Error Text="Trailing slash in WorkingDirectory is not supported" Condition="HasTrailingSlash($(WorkingDirectory))" />
-		<Message Importance="high" Text="KbDatabase: $(KbDatabase)" />
-	</Target>
-
-	<Target Name="PrepareAWSDeploy">
-
-		<ItemGroup>
-			<WarFiles Include="$(WarArtifacts)"/>
-			<EBExtensions Include="$(EBExtensionFolder)\*.*"/>
-		</ItemGroup>
-
-		<Copy SourceFiles="@(WarFiles)" DestinationFolder="$(ZipBundleBasePath)"/>
-		<Copy SourceFiles="@(EBExtensions)" DestinationFolder="$(ZipBundleBasePath)\.ebextensions"/>
-
-		<ZipDirectory SourceDirectory="$(ZipBundleBasePath)" DestinationFile="$(ZipApplicationBundle)" Overwrite="true"/>
-
-	</Target>
-
-	<Target Name="DeployToAWS" DependsOnTargets="PrepareAWSDeploy">
-
-		<DeployAWSEBWebApp
-			ProfileName='$(AWSEB_PROFILE_NAME)'
-			AccessKey='$(AWSEB_ACCESS_KEY_ID)'
-			SecretKey='$(AWSEB_SECRET_ACCESS_KEY)'
-			RegionName='$(AWSEB_DEFAULT_REGION)'
-			ApplicationName='$(AWSEB_APPLICATION_NAME)'
-			ApplicationVersionName='$(AWSEB_APPLICATION_VERSION)'
-			EnvironmentName='$(AWSEB_ENVIRONMENT_NAME)'
-			GeneratorId='$(LANGUAGE)'
-			DeployFile='$(ZipApplicationBundle)'
-			JavaStackName=''
-			NetStackName=''/>
+		<BuildOne BuildCalled="$(BuildCalled)" 
+					ObjectName="$(ObjectName)" 
+					ForceRebuild="$(ForceRebuild)" 
+					DetailedNavigation="$(DetailedNavigation)"/>
 	</Target>
 
 </Project>

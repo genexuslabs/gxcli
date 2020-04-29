@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IGXCliVerbProvider.cs" />
+    <Compile Include="KBBasedVerbProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GXCliVerbProviderAttribute.cs" />
   </ItemGroup>
