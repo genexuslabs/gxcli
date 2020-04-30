@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using gxcli.Misc;
 
 namespace gxcli
@@ -13,6 +15,7 @@ namespace gxcli
 
 		static void Main(string[] args)
 		{
+			Debug.Assert(false, "Wanna attach for debugging purposes?");
 			try
 			{
 				if (args.Length == 0)
@@ -39,10 +42,10 @@ namespace gxcli
 					return;
 				}
 
-				Dictionary<string, string> options = ParseArguments(args);
-
 				if (Config.Default.Providers.ContainsKey(verb.ToLower()))
 				{
+					Dictionary<string, string> options = ParseArguments(args.Skip(1));
+
 					if (options.ContainsKey(HELP))
 					{
 						OutputHelper.ShowUsage(verb);
@@ -73,7 +76,7 @@ namespace gxcli
 			}
 		}
 
-		private static Dictionary<string, string> ParseArguments(string[] args)
+		private static Dictionary<string, string> ParseArguments(IEnumerable<string> args)
 		{
 			Dictionary<string, string> parsed = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 			foreach (string item in args)

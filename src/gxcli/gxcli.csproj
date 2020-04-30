@@ -128,11 +128,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetDir)\$(TargetName)*.* $(GXPath)
-copy $(TargetDir)\Microsoft.Build.Framework.dll $(GXPath)
-copy $(TargetDir)\Microsoft.Build.dll $(GXPath)
-copy $(TargetDir)\System.Threading.Tasks.Dataflow.dll $(GXPath)
-copy $(TargetDir)\System.Collections.Immutable.dll $(GXPath)
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

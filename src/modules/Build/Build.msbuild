@@ -4,18 +4,18 @@
 	<Import Project="$(GX_PROGRAM_DIR)\Genexus.Server.Tasks.targets"/>
 	<Import Project="$(GX_PROGRAM_DIR)\GeneXus.AWS.targets"/>
 	<Import Project="$(GX_PROGRAM_DIR)\GXtest.targets"/>
-	<Import Project="$(GX_PROGRAM_DIR)\Deploy.msbuild"/>
 	<Import Condition="Exists('$(LocalSettings)')" Project="$(LocalSettings)"/>
 
 	<PropertyGroup> <!--Input Parameters-->
-
-		<BuildCalled Condition="'$(BuildCalled)' == ''">true</BuildCalled>
-		<CompileMains Condition="'$(CompileMains)' == ''">true</CompileMains>
 
 		<!-- Working KB Properties -->
 		<KBPath></KBPath>
 		<Version></Version>
 		<Environment></Environment>
+		
+		<BuildCalled Condition="'$(BuildCalled)' == ''">true</BuildCalled>
+		<CompileMains Condition="'$(CompileMains)' == ''">true</CompileMains>
+		<Build Condition="'$(Build)' == ''">true</Build>
 
 	</PropertyGroup>
 
@@ -49,6 +49,18 @@
 					ObjectName="$(ObjectName)" 
 					ForceRebuild="$(ForceRebuild)" 
 					DetailedNavigation="$(DetailedNavigation)"/>
+	</Target>
+
+	<Target Name="Run" DependsOnTargets="Open">
+
+		<Message Text="ForceRebuild:$(ForceRebuild)" Importance="high"/>
+		
+		<Run BuildCalled="$(BuildCalled)"
+			 ObjectName="$(ObjectName)"
+			 ForceRebuild="$(ForceRebuild)"
+			 DetailedNavigation="$(DetailedNavigation)"
+			 Parameters="$(Parameters)"
+			 Build="$(Build)"/>
 	</Target>
 
 </Project>

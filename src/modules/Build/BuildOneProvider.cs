@@ -22,7 +22,7 @@ namespace Build
 
 		public List<Example> Examples => new List<Example>
 		{
-			new Example { Command = "gx build-one kbpath=C:\\Models\\MyKB ObjectName=MyMainWebPanel", Description = "Builds an object called MyMainWebPanel from MyKB Knowledge Base " }
+			new Example { Command = "gx build-one kbpath=C:\\Models\\MyKB ObjectName=MyMainWebPanel", Description = "Builds an object called MyMainWebPanel from MyKB Knowledge Base" }
 		};
 	}
 }
