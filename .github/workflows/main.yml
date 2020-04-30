@@ -28,6 +28,5 @@ jobs:
 
     # Runs a multiple command using the runners shell
     - name: Build Solution
-      run: |
-        nuget restore gxcli.sln
-        msbuild gxcli.sln /p:Configuration=Release
+      run: nuget restore gxcli.sln
+      run: msbuild gxcli.sln /p:Configuration=Release
