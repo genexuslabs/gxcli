@@ -1,5 +1,5 @@
 # GeneXus CLI
-
+![Build](https://github.com/sebagomez/gxcli/workflows/Build/badge.svg?branch=master&event=push)
 ```
    ____               ___  __
   / ___| ___ _ __   ___\ \/ /   _ ___
