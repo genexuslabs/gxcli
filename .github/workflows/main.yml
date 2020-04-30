@@ -28,4 +28,4 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Build Solution
-      run: msbuild gxcli.sln
+      run: msbuild gxcli.sln /p:Configuration=Release
