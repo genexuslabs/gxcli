@@ -26,6 +26,13 @@ jobs:
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
 
+    - name: Setup NuGet.exe
+      uses: nuget/setup-nuget@v1
+    
+    # Runs a multiple command using the runners shell
+    - name: Restore Nuget
+      run: Nuget restore gxcli.sln
+
     # Runs a multiple command using the runners shell
     - name: Build Solution
-      run: msbuild gxcli.sln /p:Configuration=Release /t:Rebuild
+      run: msbuild gxcli.sln /p:Configuration=Release
