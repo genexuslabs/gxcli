@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="BuildOneProvider.cs" />
     <Compile Include="BuildProvider.cs" />
+    <Compile Include="DeployProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunProvider.cs" />
   </ItemGroup>

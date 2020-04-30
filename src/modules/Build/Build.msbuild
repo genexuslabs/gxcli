@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Update" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Import Project="$(GX_PROGRAM_DIR)\GeneXus.Tasks.targets"/>
-	<Import Project="$(GX_PROGRAM_DIR)\Genexus.Server.Tasks.targets"/>
 	<Import Project="$(GX_PROGRAM_DIR)\GeneXus.AWS.targets"/>
 	<Import Project="$(GX_PROGRAM_DIR)\GXtest.targets"/>
+	<Import Project="$(GX_PROGRAM_DIR)\Deploy.msbuild"/>
 	<Import Condition="Exists('$(LocalSettings)')" Project="$(LocalSettings)"/>
 
 	<PropertyGroup> <!--Input Parameters-->
@@ -16,6 +15,7 @@
 		<BuildCalled Condition="'$(BuildCalled)' == ''">true</BuildCalled>
 		<CompileMains Condition="'$(CompileMains)' == ''">true</CompileMains>
 		<Build Condition="'$(Build)' == ''">true</Build>
+		<ConfigGX>$(KBPath)\config.gx</ConfigGX>
 
 	</PropertyGroup>
 
@@ -52,15 +52,26 @@
 	</Target>
 
 	<Target Name="Run" DependsOnTargets="Open">
-
-		<Message Text="ForceRebuild:$(ForceRebuild)" Importance="high"/>
-		
 		<Run BuildCalled="$(BuildCalled)"
 			 ObjectName="$(ObjectName)"
 			 ForceRebuild="$(ForceRebuild)"
 			 DetailedNavigation="$(DetailedNavigation)"
 			 Parameters="$(Parameters)"
 			 Build="$(Build)"/>
+	</Target>
+
+	<Target Name="Deploy">
+
+		<PropertyGroup>
+			<KBVersion>$(Version)</KBVersion>
+			<KBEnvironment>$(Environment)</KBEnvironment>
+		</PropertyGroup>
+
+		<CallTarget Targets="CreateDeploy">
+			<Output TaskParameter="TargetOutputs" PropertyName="ProjectFile"/>
+		</CallTarget>
+
+		<MSbuild Projects="$(ProjectFile)"/>
 	</Target>
 
 </Project>
