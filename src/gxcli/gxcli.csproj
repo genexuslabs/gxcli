@@ -32,13 +32,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <GXPath>C:\code\genexus\trunk\Deploy\GeneXus\Debug</GXPath>
-  </PropertyGroup>
   <ItemGroup>
     <!-- GeneXus References -->
     <Reference Include="Genexus.MsBuild.Tasks">
-      <HintPath>$(GXPath)\Genexus.MsBuild.Tasks.dll</HintPath>
+      <HintPath>..\..\freezer\Genexus.MsBuild.Tasks.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
