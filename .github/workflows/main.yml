@@ -28,4 +28,4 @@ jobs:
 
     # Runs a multiple command using the runners shell
     - name: Build Solution
-      run: msbuild gxcli.sln /p:Configuration=Release /:Rebuild
+      run: msbuild gxcli.sln /p:Configuration=Release /t:Rebuild
