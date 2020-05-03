@@ -38,5 +38,5 @@ jobs:
       run: msbuild gxcli.sln /p:Configuration=Release
 
     - name: Create a Release
-    uses: actions/create-release@v1
+      uses: actions/create-release@v1
     
