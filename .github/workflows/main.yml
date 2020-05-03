@@ -39,4 +39,5 @@ jobs:
 
     - name: Create a Release
       uses: actions/create-release@v1
-    
+      with:
+        tag_name: ${{ github.ref }}
