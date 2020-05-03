@@ -36,3 +36,7 @@ jobs:
     # Runs a multiple command using the runners shell
     - name: Build Solution
       run: msbuild gxcli.sln /p:Configuration=Release
+
+    - name: Create a Release
+    uses: actions/create-release@v1
+    
