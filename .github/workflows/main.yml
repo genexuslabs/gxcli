@@ -47,16 +47,8 @@ jobs:
         Write-Host GXCLI_VERSION $env:GXCLI_VERSION
         echo "::set-env name=GXCLI_VERSION::$env:GXCLI_VERSION"
 
-    - name: Create a Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      with:
-        tag_name: ${{ env.GXCLI_VERSION }}
-        release_name: Release ${{ env.GXCLI_VERSION }}
-
     - name: Deploy 
-      run: .\deploy.ps1 .\deploy\ ${env:Configuration}
+      run: ".\deploy.ps1 .\deploy\ ${env:Configuration}"
       shell: powershell
 
     - uses: actions/checkout@master
@@ -65,6 +57,14 @@ jobs:
       with:
         filename: 'gxcli.zip'
         path: deploy
+
+    - name: Create a Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ env.GXCLI_VERSION }}
+        release_name: Release ${{ env.GXCLI_VERSION }}
 
     - name: Upload Release Asset
       id: upload-release-asset 
