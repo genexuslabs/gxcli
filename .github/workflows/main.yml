@@ -51,12 +51,9 @@ jobs:
       run: .\deploy.ps1 .\deploy\ ${env:Configuration} $true
       shell: powershell
 
-    - uses: actions/checkout@master
-    - name: Archive Release
-      uses: thedoctor0/zip-release@master
-      with:
-        filename: 'gxcli.zip'
-        path: deploy
+    - name: Zip it! 
+      run: Compress-Archive .\deploy\* gxcli.zip
+      shell: powershell
 
     - name: Create a Release
       uses: actions/create-release@v1
