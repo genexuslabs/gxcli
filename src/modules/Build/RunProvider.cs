@@ -16,10 +16,10 @@ namespace Build
 		{
 			new VerbParameter { Name = "ObjectName", Description = "Object to execute.", Required = true },
 			new VerbParameter { Name = "ForceRebuild", Description = "Force rebuild the object." },
-			new VerbParameter { Name = "BuildCalled", Description = "Build only the Object if false, or the Object and all the called if true (Default)" },
-			new VerbParameter { Name = "DetailedNavigation", Description = "Show detailed navigation" },
-			new VerbParameter { Name = "Parameters", Description = "Parameters for the execution" },
-			new VerbParameter { Name = "Build", Description = "If true, (default) executes build before running" }
+			new VerbParameter { Name = "BuildCalled", Description = "Build only the Object if false, or the Object and all the called if true (Default)." },
+			new VerbParameter { Name = "DetailedNavigation", Description = "Show detailed navigation." },
+			new VerbParameter { Name = "Parameters", Description = "Parameters for the execution." },
+			new VerbParameter { Name = "Build", Description = "If true, (default) executes build before running." }
 		};
 
 		public List<Example> Examples => new List<Example>

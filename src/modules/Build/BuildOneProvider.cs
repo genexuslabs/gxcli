@@ -15,9 +15,9 @@ namespace Build
 		public List<VerbParameter> Parameters => new List<VerbParameter>(KBBasedVerbProvider.KBParameters)
 		{
 			new VerbParameter { Name = "ObjectName", Description = "Object to compile.", Required = true },
-			new VerbParameter { Name = "ForceRebuild", Description = "Force rebuild the object"},
-			new VerbParameter { Name = "BuildCalled", Description = "Build only the Object if false, or the Object and all the called if true (Default)"},
-			new VerbParameter { Name = "DetailedNavigation", Description = "Show detailed navigation"},
+			new VerbParameter { Name = "ForceRebuild", Description = "Force rebuild the object."},
+			new VerbParameter { Name = "BuildCalled", Description = "Build only the Object if false, or the Object and all the called if true (Default)."},
+			new VerbParameter { Name = "DetailedNavigation", Description = "Show detailed navigation."},
 		};
 
 		public List<Example> Examples => new List<Example>

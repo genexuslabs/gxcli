@@ -21,6 +21,10 @@ namespace Build
 			new VerbParameter { Name = "ProjectName", Description = "The name of the project to be created." }
 		};
 
-		public List<Example> Examples => new List<Example>();
+		public List<Example> Examples => new List<Example>
+		{
+			new Example { Command = "gx deploy kbpath=C:\\Models\\MyKB ObjectNames=WebPanel1", Description = "Deploy an object called WebPanel1 from the default environment of the MyKB Knowledge Base." },
+			new Example { Command = "gx deploy kbpath=C:\\Models\\MyKB ObjectNames=WebPanel1 Environment=\"Java Environment\" ObjectNames=WebPanel1 ProjectName=MyDeploy", Description = "Deploy an object called WebPanel1 from a environment called 'Java Environment' of the MyKB Knowledge Base." },
+		};
 	}
 }
