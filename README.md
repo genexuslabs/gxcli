@@ -54,7 +54,7 @@ gx build kbpath=C:\Models\MyKB failIfReorg verbosity=minimal
 
 ## Installation
 Download the [latest release](https://github.com/sebagomez/gxcli/releases/latest) and unzip the gxcli.zip file into your GeneXus installation folder.  
-Make sure you install the tool first by running `gx install`. And tha's it!
+Make sure you install the tool first by running `gx install`. And that's it!
 
 
 ## GeneXus CLI Platform
@@ -104,6 +104,29 @@ public class BuildProvider : IGXCliVerbProvider
     new Example{ Command = "gx build kbpath=C:\\Models\\MyKB failIfReorg", Description = "Bulid All on your Knowledge Base, but fail if a database reorganization is found" }
   };
 }
+```
+so when you run `gx build help` this is what you'll see  
+```
+Usage: gx build [parameters]|help [global options]
+
+    build                     : Build All for the working environment
+
+Parameters
+    KBPath                    : Path to the Knowledge Base directory. [Required]
+    Version                   : Name of the Knowledge Base version to use.
+    Environment               : Name of the Environment to use.
+    ForceRebuild              : Force rebuild the objects
+    DoNotExecuteReorg         : Do not execute reorg, just create it
+    FailIfReorg               : Generate, but do not make a build if a reorg is needed
+    CompileMains              : Compile all main object, if false only compile the Developer Menu.
+    DetailedNavigation        : Show detailed navigation
+
+Examples
+    Rebulid All on your Knowledge Base
+        gx build kbpath=C:\Models\MyKB forceRebuild
+
+    Bulid All on your Knowledge Base, but fail if a database reorganization is found
+        gx build kbpath=C:\Models\MyKB failIfReorg
 ```
 
 4 - Compile your module and that's it. In order to try it copy it into the `<GeneXus>\gxclimodules` folder with its .msbuild/.targets file. Run `gx install` so the *GeneXus CLI* can pick it up and have it available for future use.
