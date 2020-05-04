@@ -24,6 +24,7 @@ We do have support for MSBuild tasks, so you can pretty much do everything with 
 
 It is also based on MSBuild, so whatever this tool does, it can be done via MSBuild scripts. As a matter of fact, every module has an MSBuild script to support the exposed commands.
 
+
 ## Usage
 
 ```
@@ -50,11 +51,14 @@ Global options are not specific to any command, it's a way of sending general pr
 gx build kbpath=C:\Models\MyKB failIfReorg verbosity=minimal
 ```
 
+
 ## Installation
-Copy the files to your installation of GeneXu and that's it. Coming soon there will be a way of installing via Nuget.
+Download the [latest release](https://github.com/sebagomez/gxcli/releases/latest) and unzip the gxcli.zip file into your GeneXus installation folder.  
+Make sure you install the tool first by running `gx install`. And tha's it!
+
 
 ## GeneXus CLI Platform
-What to create your own modules? Maybe you want to call your own extensions.  
+Want to create your own modules? Maybe you want to call your own extensions.  
 In Visual Studio create a new `Class Library (.NET Framework 4.7.1)` project and add a reference to the `gxcli common` project of this repo (it'll also be a NuGet package soon).
 These are the needed steps to create a class that exposes commands (verbs).  
 
@@ -75,4 +79,31 @@ using gxcli.common;
 - Parameters: List of parameters your commands need or accept. Make sure you use the `Required` property accordingly.
 - Examples: You can also add a few examples that will be shown to the users when they want to know more about your command.
 
-4 - Compile your module and that's it. In order to try it copy it into the `<GeneXus>\gxclimodules` folder with its .msbuild/.targets file. Run `gx install` so the GeneXus CLI can pick it up and have it available for future use.
+Here's an example of the actual `build` verb.
+```cs
+public class BuildProvider : IGXCliVerbProvider
+{
+  public string Name => "build";
+
+  public string Description => "Build All for the working environment";
+
+  public string Target => "Build";
+
+  public List<VerbParameter> Parameters => new List<VerbParameter>(KBBasedVerbProvider.KBParameters)
+  {
+    new VerbParameter { Name = "ForceRebuild", Description = "Force rebuild the objects" },
+    new VerbParameter { Name = "DoNotExecuteReorg", Description = "Do not execute reorg, just create it" },
+    new VerbParameter { Name = "FailIfReorg", Description = "Generate, but do not make a build if a reorg is needed" },
+    new VerbParameter { Name = "CompileMains", Description = "Compile all main object, if false only compile the Developer Menu." },
+    new VerbParameter { Name = "DetailedNavigation", Description = "Show detailed navigation" },
+  };
+
+  public List<Example> Examples => new List<Example>
+  {
+    new Example{ Command = "gx build kbpath=C:\\Models\\MyKB forceRebuild", Description = "Rebulid All on your Knowledge Base" }, 
+    new Example{ Command = "gx build kbpath=C:\\Models\\MyKB failIfReorg", Description = "Bulid All on your Knowledge Base, but fail if a database reorganization is found" }
+  };
+}
+```
+
+4 - Compile your module and that's it. In order to try it copy it into the `<GeneXus>\gxclimodules` folder with its .msbuild/.targets file. Run `gx install` so the *GeneXus CLI* can pick it up and have it available for future use.
