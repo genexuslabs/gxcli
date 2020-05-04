@@ -26,11 +26,12 @@ if (-not (Test-Path $destination))
 {
     if ($ci)
     {
+        New-Item $destination -ItemType Directory
+    }
+    else 
+    {
         Write-Error "Invalid path $destination"
         return
-    }
-    else {
-        New-Item $destination -ItemType Directory
     }
 }
 
