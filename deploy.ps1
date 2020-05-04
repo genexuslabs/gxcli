@@ -27,11 +27,11 @@ if (-not (Test-Path $destination))
     return
 }
 
-if (-not (Test-Path $destination\genexus.exe))
-{
-    Write-Error "$destination does not look like a valid GeneXus installation"
-    return
-}
+# if (-not (Test-Path $destination\genexus.exe))
+# {
+#     Write-Error "$destination does not look like a valid GeneXus installation"
+#     return
+# }
 
 if (-not $conf)
 {
