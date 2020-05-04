@@ -17,6 +17,9 @@ jobs:
     # The type of runner that the job will run on
     runs-on: windows-2019
 
+    env:
+      Configuration: Release
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -35,13 +38,15 @@ jobs:
 
     # Runs a multiple command using the runners shell
     - name: Build Solution
-      run: msbuild gxcli.sln /p:Configuration=Release
+      run: msbuild gxcli.sln /p:Configuration=${env:Configuration}
 
     - name: Set the version environment variable
       run: |
-        $file = ".\src\gxcli\bin\Release\gx.exe"
+        $file = ".\src\gxcli\bin\${env:Configuration}\gx.exe"
         $env:GXCLI_VERSION = $(Get-Item $file).VersionInfo.ProductVersion
         Write-Host GXCLI_VERSION $env:GXCLI_VERSION
+      env:
+        GXCLI_VERSION: ${{ env.GXCLI_VERSION }}
 
     - name: Create a Release
       uses: actions/create-release@v1
