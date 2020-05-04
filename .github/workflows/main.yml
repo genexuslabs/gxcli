@@ -41,6 +41,7 @@ jobs:
       run: |
         $file = ".\src\gxcli\bin\Release\gx.exe"
         $env:GXCLI_VERSION = $(Get-Item $file).VersionInfo.ProductVersion
+        Write-Host GXCLI_VERSION $env:GXCLI_VERSION
 
     - name: Create a Release
       uses: actions/create-release@v1
