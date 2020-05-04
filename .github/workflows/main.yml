@@ -45,8 +45,7 @@ jobs:
         $file = ".\src\gxcli\bin\${env:Configuration}\gx.exe"
         $env:GXCLI_VERSION = $(Get-Item $file).VersionInfo.ProductVersion
         Write-Host GXCLI_VERSION $env:GXCLI_VERSION
-      env:
-        GXCLI_VERSION: ${{ env.GXCLI_VERSION }}
+        echo "::set-env name=GXCLI_VERSION::$env:GXCLI_VERSION"
 
     - name: Create a Release
       uses: actions/create-release@v1
