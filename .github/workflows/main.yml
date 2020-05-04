@@ -39,7 +39,7 @@ jobs:
 
     - name: Set the version environment variable
       run: |
-        $file = ".\src\gxcli\bin\Release"
+        $file = ".\src\gxcli\bin\Release\gx.exe"
         $env:GXCLI_VERSION = $(Get-Item $file).VersionInfo.ProductVersion
 
     - name: Create a Release
