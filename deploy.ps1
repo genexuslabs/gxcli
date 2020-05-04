@@ -1,7 +1,8 @@
 
 param(
     [string]$gxpath,
-    [string]$conf
+    [string]$conf,
+    [boolean]$ci
     )
 
 if ($gxpath)
@@ -23,15 +24,21 @@ if (-not $destination)
 
 if (-not (Test-Path $destination))
 {
-    Write-Error "Invalid path $destination"
-    return
+    if ($ci)
+    {
+        Write-Error "Invalid path $destination"
+        return
+    }
+    else {
+        New-Item $destination -ItemType Directory
+    }
 }
 
-# if (-not (Test-Path $destination\genexus.exe))
-# {
-#     Write-Error "$destination does not look like a valid GeneXus installation"
-#     return
-# }
+if ((-not $ci) -and -not (Test-Path $destination\genexus.exe))
+{
+    Write-Error "$destination does not look like a valid GeneXus installation"
+    return
+}
 
 if (-not $conf)
 {

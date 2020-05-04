@@ -48,7 +48,7 @@ jobs:
         echo "::set-env name=GXCLI_VERSION::$env:GXCLI_VERSION"
 
     - name: Deploy 
-      run: .\deploy.ps1 .\deploy\ ${env:Configuration}
+      run: .\deploy.ps1 .\deploy\ ${env:Configuration} $true
       shell: powershell
 
     - uses: actions/checkout@master
