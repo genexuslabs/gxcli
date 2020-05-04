@@ -57,6 +57,7 @@ jobs:
 
     - name: Deploy 
       run: .\deploy.ps1 .\deploy\ ${env:Configuration}
+      shell: powershell
 
     - uses: actions/checkout@master
     - name: Archive Release
