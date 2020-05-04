@@ -1,22 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using common;
+using gxcli.common;
 
 namespace TeamDev
 {
 	public class UpdateProvider : IGXCliVerbProvider
 	{
-		public string Name => throw new NotImplementedException();
+		public string Name => "update";
 
-		public string Description => throw new NotImplementedException();
+		public string Description => "Updates the local Knowledge Base with the latest changes from GXserver.";
 
-		public string Target => throw new NotImplementedException();
+		public string Target => "update";
 
-		public List<VerbParameter> Parameters => throw new NotImplementedException();
+		public List<VerbParameter> Parameters => new List<VerbParameter>(KBBasedVerbProvider.KBParameters)
+		{
+			new VerbParameter { Name = "UpdateKbProperties", Description = "Update nondefault Knowledgebase properties." },
+			new VerbParameter { Name = "Preview", Description = "When true it only shows which are the files to be updated. The Knowledge Base is not modified." },
+			new VerbParameter { Name = "ChangesFromDate", Description = "This date will be used to obtain changes in GXserver that were done after this date." },
+			new VerbParameter { Name = "ToRevision", Description = "This number will be used to update the local Knowledge Base to the number revision." },
+			new VerbParameter { Name = "IncludeItems", Description = "Specifies which objects to import." },
+			new VerbParameter { Name = "ExcludeItems", Description = "Specifies which objects to exclude." },
+		};
 
-		public List<Example> Examples => throw new NotImplementedException();
+		public List<Example> Examples => new List<Example>();
 	}
 }

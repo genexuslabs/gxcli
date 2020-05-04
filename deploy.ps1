@@ -51,16 +51,9 @@ $gxclimodules = $destination+ "\gxclimodules\"
 Write-Host Copying gxcli
 Copy-Item -Path .\src\gxcli\bin\$conf\gx.* $destination
 
-$required = "Microsoft.Build.Framework.dll", "Microsoft.Build.dll", "System.Threading.Tasks.Dataflow.dll", "System.Collections.Immutable.dll"
-
-foreach($r in $required)
-{
-    Write-Host Copying $r
-    Copy-Item -Path .\src\gxcli\bin\$conf\$r $destination
-}
-
 Write-Host Copying common
 Copy-Item -Path .\src\common\bin\$conf\gxcli.common.* $destination
+
 
 if (-not (Test-Path $gxclimodules))
 {
@@ -69,7 +62,6 @@ if (-not (Test-Path $gxclimodules))
 }
 
 $modules = Get-ChildItem .\src\modules -Directory
-
 foreach($m in $modules)
 {
     Write-Host Copying $m module

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Update" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Import Project="$(GX_PROGRAM_DIR)\GeneXus.AWS.targets"/>
-	<Import Project="$(GX_PROGRAM_DIR)\GXtest.targets"/>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Import Project="$(GX_PROGRAM_DIR)\Deploy.msbuild"/>
-	<Import Condition="Exists('$(LocalSettings)')" Project="$(LocalSettings)"/>
 
 	<PropertyGroup> <!--Input Parameters-->
 
