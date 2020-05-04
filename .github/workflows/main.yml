@@ -37,10 +37,15 @@ jobs:
     - name: Build Solution
       run: msbuild gxcli.sln /p:Configuration=Release
 
+    - name: Set the version environment variable
+      run: |
+        $file = ".\src\gxcli\bin\Release"
+        $env:GXCLI_VERSION = $(Get-Item $file).VersionInfo.ProductVersion
+
     - name: Create a Release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ env.GXCLI_VERSION }}
+        release_name: Release ${{ env.GXCLI_VERSION }}
