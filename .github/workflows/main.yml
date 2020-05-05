@@ -48,6 +48,9 @@ jobs:
         $env:GXCLI_VERSION = $(Get-Item $file).VersionInfo.ProductVersion
         Write-Host GXCLI_VERSION $env:GXCLI_VERSION
         echo "::set-env name=GXCLI_VERSION::$env:GXCLI_VERSION"
+        $env:TIMESTAMP = Get-Date -Format "yyyyMMddHHmmss"
+        Write-Host TIMESTAMP $env:TIMESTAMP
+        echo "::set-env name=TIMESTAMP::$env:TIMESTAMP"
 
     - name: Deploy 
       run: .\deploy.ps1 .\deploy\ ${env:Configuration} $true
@@ -63,8 +66,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: ${{ env.GXCLI_VERSION }}
-        release_name: Release ${{ env.GXCLI_VERSION }}
+        tag_name: ${{ env.TIMESTAMP }}
+        release_name: Release ${{ env.TIMESTAMP }} (gxcli ${{ env.GXCLI_VERSION }})
 
     - name: Upload Release Asset
       id: upload-release-asset 
