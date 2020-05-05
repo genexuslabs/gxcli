@@ -63,6 +63,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="ConfigProvider.cs" />
     <Compile Include="Misc\GlobalOption.cs" />
+    <Compile Include="Misc\Levenshtein.cs" />
     <Compile Include="Misc\OutputHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

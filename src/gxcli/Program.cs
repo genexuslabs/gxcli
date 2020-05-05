@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using gxcli.Misc;
 
 namespace gxcli
@@ -15,7 +16,7 @@ namespace gxcli
 
 		static void Main(string[] args)
 		{
-			Debug.Assert(false, "Wanna attach for debugging purposes?");
+			//Debug.Assert(false, "Wanna attach for debugging purposes?");
 			try
 			{
 				if (args.Length == 0)
@@ -57,6 +58,8 @@ namespace gxcli
 					return;
 				}
 
+				ThrowInvalidVerb(verb);
+
 			}
 			catch (Exception ex)
 			{
@@ -74,6 +77,33 @@ namespace gxcli
 					inner = inner.InnerException;
 				}
 			}
+		}
+
+		private static void ThrowInvalidVerb(string param)
+		{
+			int thredshold = param.Length / 2;
+			List<string> similar = new List<string>();
+			foreach (string verb in Config.Default.Providers.Keys)
+			{
+				int l = Levenshtein.DamerauLevenshteinDistance(param.ToLower(), verb, thredshold);
+				if (l <= thredshold)
+					similar.Add(verb);
+			}
+
+			StringBuilder msg = new StringBuilder($"gx: '{param}' is not a gx command.{Environment.NewLine}");
+			if (similar.Count > 0)
+			{
+				msg.AppendLine("");
+				msg.AppendLine("The most similar commands are");
+				foreach (string cmd in similar)
+				{
+					msg.AppendLine($"\t{cmd}");
+				}
+			}
+			msg.AppendLine("");
+			msg.AppendLine("See 'gx help'.");
+
+			throw new Exception(msg.ToString());
 		}
 
 		private static Dictionary<string, string> ParseArguments(IEnumerable<string> args)
