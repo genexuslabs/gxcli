@@ -11,14 +11,8 @@
 		<Environment></Environment>
 		
 		<!-- Server Properties -->
-		<ServerUrl></ServerUrl>
-		<ServerUsername></ServerUsername>
+		<ServerUserName></ServerUserName>
 		<ServerPassword></ServerPassword>
-		<ServerKbAlias></ServerKbAlias>
-		<ServerKbVersion></ServerKbVersion>
-		<GetAllKbVersions></GetAllKbVersions>
-		<VersionName></VersionName>
-
 
 	</PropertyGroup>
 
@@ -40,9 +34,7 @@
 	<Target Name="Open" DependsOnTargets="OpenWorkingKB;SelectVersion;SelectEnvironment"/>
 
 	<Target Name="Update" DependsOnTargets="Open">
-		<UpdateFromServer ServerUserName="$(GXServerUsername)" ServerPassword="$(GXServerUsername)" />
+		<UpdateFromServer ServerUserName="$(ServerUserName)" ServerPassword="$(ServerPassword)" />
 	</Target>
-
-
 
 </Project>

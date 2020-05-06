@@ -12,7 +12,6 @@ namespace gxcli
 		const string INSTALL = "install";
 		const string HELP = "help";
 		const string VERSION = "version";
-		
 
 		static void Main(string[] args)
 		{
@@ -81,12 +80,12 @@ namespace gxcli
 
 		private static void ThrowInvalidVerb(string param)
 		{
-			int thredshold = param.Length / 2;
+			int threshold = param.Length / 2;
 			List<string> similar = new List<string>();
 			foreach (string verb in Config.Default.Providers.Keys)
 			{
-				int l = Levenshtein.DamerauLevenshteinDistance(param.ToLower(), verb, thredshold);
-				if (l <= thredshold)
+				int distance = Levenshtein.DamerauLevenshteinDistance(param.ToLower(), verb, threshold);
+				if (distance <= threshold)
 					similar.Add(verb);
 			}
 

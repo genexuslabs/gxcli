@@ -4,6 +4,9 @@ namespace common
 {
 	public interface IGXCliVerbProvider
 	{
+		/// <summary>
+		/// Name of the command
+		/// </summary>
 		string Name { get;  }
 		string Description { get;  }
 		string Target { get; }
