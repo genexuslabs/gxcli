@@ -1,8 +1,7 @@
 
 param(
     [string]$gxpath,
-    [string]$conf,
-    [boolean]$ci
+    [string]$conf
     )
 
 if ($gxpath)
@@ -24,21 +23,7 @@ if (-not $destination)
 
 if (-not (Test-Path $destination))
 {
-    if ($ci)
-    {
-        New-Item $destination -ItemType Directory
-    }
-    else 
-    {
-        Write-Error "Invalid path $destination"
-        return
-    }
-}
-
-if ((-not $ci) -and -not (Test-Path $destination\genexus.exe))
-{
-    Write-Error "$destination does not look like a valid GeneXus installation"
-    return
+    New-Item $destination -ItemType Directory
 }
 
 if (-not $conf)
@@ -46,7 +31,7 @@ if (-not $conf)
     $conf = "Debug"
 }
 
-$gxclimodules = $destination+ "\gxclimodules\"
+$gxclimodules = $destination + "\gxclimodules\"
 
 Write-Host Copying gxcli
 Copy-Item -Path .\src\gxcli\bin\$conf\gx.* $destination
@@ -54,6 +39,13 @@ Copy-Item -Path .\src\gxcli\bin\$conf\gx.* $destination
 Write-Host Copying common
 Copy-Item -Path .\src\common\bin\$conf\gxcli.common.* $destination
 
+$required = "Newtonsoft.Json.dll"
+
+foreach($r in $required)
+{
+    Write-Host Copying $r
+    Copy-Item -Path .\src\gxcli\bin\$conf\$r $destination
+}
 
 if (-not (Test-Path $gxclimodules))
 {

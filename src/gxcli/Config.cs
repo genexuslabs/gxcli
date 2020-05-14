@@ -13,6 +13,9 @@ namespace gxcli
 		readonly static string GXCLI_CONFIG = "gxcli.config";
 
 		public Dictionary<string, ConfigProvider> Providers = new Dictionary<string, ConfigProvider>();
+
+		public string GeneXusPath { get; set; }
+
 		private static string ConfigFilePath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, GXCLI_CONFIG);
 
 		static Config s_instance;
@@ -31,12 +34,25 @@ namespace gxcli
 			}
 		}
 
-		public static void Install()
+		public static void Install(string gxPath)
 		{
+			if (string.IsNullOrEmpty(gxPath))
+				throw new Exception("You must enter the path to a GeneXus installation");
+
+			if (!Directory.Exists(gxPath))
+				throw new DirectoryNotFoundException($"'{gxPath}' does not look like a valid directory");
+
+			string gxExe = Path.Combine(gxPath, "genexus.exe");
+			if (!File.Exists(gxExe))
+				throw new Exception($"'{gxPath}' does not look like a valid GeneXus installation folder");
+
+			s_instance = new Config
+			{
+				GeneXusPath = gxPath
+			};
+
 			var dir = AppDomain.CurrentDomain.BaseDirectory;
 			string modulesPath = Path.Combine(dir, "gxclimodules");
-
-			s_instance = new Config();
 
 			foreach (string dllPath in Directory.GetFiles(modulesPath, "*.dll"))
 			{

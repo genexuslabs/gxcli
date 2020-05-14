@@ -28,7 +28,17 @@ namespace gxcli
 				string verb = args[0];
 				if (verb.Equals(INSTALL, StringComparison.InvariantCultureIgnoreCase))
 				{
-					Config.Install();
+					string gxPath = "";
+					if (args.Length == 2)
+					{
+						gxPath = args[1];
+					}
+					if (string.IsNullOrEmpty(gxPath))
+					{
+						Console.WriteLine("You must enter the path to a valid GeneXus installation.");
+						gxPath = Console.ReadLine();
+					}
+					Config.Install(gxPath);
 					return;
 				}
 				if (verb.Equals(HELP, StringComparison.InvariantCultureIgnoreCase))

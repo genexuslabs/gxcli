@@ -53,7 +53,7 @@ jobs:
         echo "::set-env name=TIMESTAMP::$env:TIMESTAMP"
 
     - name: Deploy 
-      run: .\deploy.ps1 .\deploy\ ${env:Configuration} $true
+      run: .\deploy.ps1 .\deploy\ ${env:Configuration}
       shell: powershell
 
     - name: Zip it! 

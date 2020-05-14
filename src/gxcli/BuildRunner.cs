@@ -20,7 +20,7 @@ namespace gxcli
 				new ConsoleLogger(GetLoggerVerbosity(props))
 			};
 
-			props["GX_PROGRAM_DIR"] = AppDomain.CurrentDomain.BaseDirectory;
+			props["GX_PROGRAM_DIR"] = Config.Default.GeneXusPath;
 
 			string scriptPath = provider.AssemblyLocation.Replace(".dll", ".targets");
 			if (!File.Exists(scriptPath))
