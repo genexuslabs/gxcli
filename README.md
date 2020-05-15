@@ -16,7 +16,11 @@ We're excited to introduce *GeneXus CLI*, our next-generation command line tool 
 
 We believe there are times where you want to perform some tasks in batch. Like firing a `Rebuild All` or a big `Update` from GXserver.
 
-We do have support for MSBuild tasks, so you can pretty much do everything with MSBuild scripts. But sometimes you don't have the time (or will) to set up the scripts, remember the MSBuild syntax, dig into the documentation for parameters and so on.
+This is for power users. Users that know how to move around in a command line interface, and actually prefer to do some heavy dutty tasks from there. 
+
+GeneXus has plenty of support for MSBuild tasks, so you can pretty much do everything with MSBuild scripts. But sometimes you don't have the time (or will) to set up the scripts, remember the MSBuild syntax, dig into the documentation for parameters and so on.
+
+FYI: as you will see, this tool in built on top of the existing MSBuild tasks ecosystem.
 
 ## Introducing GeneXus CLI
 
