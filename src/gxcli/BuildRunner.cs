@@ -30,17 +30,41 @@ namespace gxcli
 					throw new FileNotFoundException("Could not find MSBuild script", scriptPath);
 			}
 
-			BuildRequestData requestData = new BuildRequestData(scriptPath, props, "4.0", new string[] { provider.Target }, null);
-
-			var parameters = new BuildParameters(new ProjectCollection())
+			string[] targets = provider.Target.Split(new[] { ',' });
+			foreach (string target in targets)
 			{
-				Loggers = loggers
-			};
+				BuildRequestData requestData = new BuildRequestData(scriptPath, props, "4.0", new string[] { target }, null);
 
-			BuildResult result = BuildManager.DefaultBuildManager.Build(parameters, requestData);
+				var parameters = new BuildParameters(new ProjectCollection())
+				{
+					Loggers = loggers
+				};
 
-			if (result.Exception != null)
-				throw result.Exception;
+				BuildResult result = BuildManager.DefaultBuildManager.Build(parameters, requestData);
+
+				if (result.Exception != null)
+					throw result.Exception;
+
+				if (result.OverallResult == BuildResultCode.Failure)
+					return;
+
+				TargetResult tResult = result.ResultsByTarget[target];
+				foreach (ITaskItem item in tResult.Items)
+				{
+					string[] outProps = item.ItemSpec.Split(new[] { ',' });
+					foreach (string outProp in outProps)
+					{
+						string[] keyVal = outProp.Split(new[] { '=' });
+						if (keyVal.Length == 0 || keyVal.Length > 2)
+							continue;
+
+						if (keyVal.Length == 2)
+							props[keyVal[0]] = keyVal[1];
+						else if (keyVal.Length == 1)
+							props[keyVal[0]] = bool.TrueString;
+					}
+				}
+			}
 		}
 
 		private static LoggerVerbosity GetLoggerVerbosity(Dictionary<string, string> props)

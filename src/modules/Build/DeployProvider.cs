@@ -17,7 +17,7 @@ namespace Build
 			new VerbParameter { Name = "ObjectNames", Description = "Objects (and its called tree) to be deployed.", Required = true},
 			new VerbParameter { Name = "OutputPath", Description = "Where the project file (.gxdproj) will be created." },
 			new VerbParameter { Name = "ApplicationKey", Description = "Application key used to encrypt sensible data." },
-			new VerbParameter { Name = "TARGET_JRE", Description = "The JRE version of the target environment (7,8,9)." },
+			new VerbParameter { Name = "TargetJRE", Description = "The JRE version of the target environment (7,8,9)." },
 			new VerbParameter { Name = "ProjectName", Description = "The name of the project to be created." }
 		};
 

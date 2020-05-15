@@ -53,11 +53,11 @@ jobs:
         echo "::set-env name=TIMESTAMP::$env:TIMESTAMP"
 
     - name: Deploy 
-      run: .\deploy.ps1 .\deploy\ ${env:Configuration}
+      run: .\deploy.ps1 .\bin\ ${env:Configuration}
       shell: powershell
 
     - name: Zip it! 
-      run: Compress-Archive .\deploy\* gxcli.zip
+      run: Compress-Archive .\bin\* gxcli.zip
       shell: powershell
 
     - name: Create a Release
