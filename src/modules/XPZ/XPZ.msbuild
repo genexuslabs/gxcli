@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="$(GX_PROGRAM_DIR)\Deploy.msbuild"/>
+		
+	<PropertyGroup> <!--Input Parameters-->
+
+		<!-- Working KB Properties -->
+		<KBPath></KBPath>
+		<Version></Version>
+		<Environment></Environment>
+		
+	</PropertyGroup>
+
+	<Target Name="SelectVersion" Condition="'$(Version)'!=''" >
+		<SetActiveVersion VersionName="$(Version)"  />
+	</Target>
+
+	<Target Name="SelectEnvironment" Condition="'$(Environment)'!=''">
+		<SetActiveEnvironment EnvironmentName="$(Environment)" />
+	</Target>
+
+	<Target Name="OpenWorkingKB">
+		<OpenKnowledgeBase
+					Directory = "$(KBPath)"
+					DatabaseUser="$(DbaseServerUsername)"
+					DatabasePassword="$(DbaseServerPassword)"/>
+	</Target>
+
+	<Target Name="Open" DependsOnTargets="OpenWorkingKB;SelectVersion;SelectEnvironment"/>
+
+	<Target Name="Import" DependsOnTargets="Open">
+		<Import File="$(FilePath)"/>
+	</Target>
+
+	<Target Name="Export" DependsOnTargets="Open">
+		<Export Objects="$(ObjectNames)" File="$(FilePath)"/>
+	</Target>
+
+</Project>
