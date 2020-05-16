@@ -57,13 +57,13 @@ gx build kbpath=C:\Models\MyKB failIfReorg verbosity=minimal
 
 
 ## Installation
-Download the [latest release](https://github.com/sebagomez/gxcli/releases/latest) and unzip the gxcli.zip file into your GeneXus installation folder.  
-Make sure you install the tool first by running `gx install`. And that's it!
+Download the [latest release](https://github.com/sebagomez/gxcli/releases/latest) and unzip the gxcli.zip file into any folder you wish.  
+Make sure you install the tool first by running `gx install <GeneXus Path>`. And that's it!
 
 
 ## GeneXus CLI Platform
 Want to create your own modules? Maybe you want to call your own extensions.  
-In Visual Studio create a new `Class Library (.NET Framework 4.7.1)` project and add a reference to the `gxcli common` project of this repo (it'll also be a NuGet package soon).
+In Visual Studio create a new `Class Library (.NET Framework 4.7.1)` project and add a reference to the `gxcli.common` project of this repo (it'll also be a NuGet package soon).
 These are the needed steps to create a class that exposes commands (verbs).  
 
 1 - In you project's AssemblyInfo.cs file, add the `GXCliVerbProvider` attribute as follows:
