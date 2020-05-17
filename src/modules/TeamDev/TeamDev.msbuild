@@ -37,4 +37,8 @@
 		<UpdateFromServer ServerUserName="$(ServerUserName)" ServerPassword="$(ServerPassword)" />
 	</Target>
 
+	<Target Name="PendingCommit" DependsOnTargets="Open">
+		<PendingCommitObjectsTask ShowModifiedOn="$(ShowModifiedOn)"/>
+	</Target>
+
 </Project>

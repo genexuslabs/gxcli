@@ -33,7 +33,7 @@
 	</Target>
 
 	<Target Name="Export" DependsOnTargets="Open">
-		<Export Objects="$(ObjectNames)" File="$(FilePath)"/>
+		<Export Objects="$(ObjectNames)" File="$(FilePath)" ReferenceType="$(ReferenceType)"/>
 	</Target>
 
 </Project>

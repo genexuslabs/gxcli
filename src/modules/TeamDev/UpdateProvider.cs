@@ -10,7 +10,7 @@ namespace TeamDev
 
 		public string Description => "Updates the local Knowledge Base with the latest changes from GXserver.";
 
-		public string Target => "update";
+		public string Target => "Update";
 
 		public List<VerbParameter> Parameters => new List<VerbParameter>(GXServerProperties.GXserverParameters)
 		{
