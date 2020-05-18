@@ -1,5 +1,5 @@
 # GeneXus CLI
-![Build](https://github.com/genexuslabs/gxcli/workflows/Build/badge.svg)
+[![](https://github.com/genexuslabs/gxcli/workflows/Build/badge.svg?branch=master)](https://github.com/genexuslabs/gxcli/actions?query=workflow%3ABuild+branch%3Amaster)
 ```
    ____               ___  __
   / ___| ___ _ __   ___\ \/ /   _ ___
