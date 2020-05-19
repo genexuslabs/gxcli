@@ -93,6 +93,7 @@ namespace gxcli.Misc
 			Console.WriteLine("Global options:");
 			foreach (GlobalOption gOption in GlobalOption.GetAll())
 				Console.WriteLine(GetHelpLine(gOption.Name, gOption.Description));
+			Console.WriteLine("");
 		}
 
 		private static string GetHelpLine(string name, string description, bool special = false)

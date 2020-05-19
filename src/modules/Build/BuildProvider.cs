@@ -17,7 +17,7 @@ namespace Build
 			new VerbParameter { Name = "ForceRebuild", Description = "Force rebuild the objects." },
 			new VerbParameter { Name = "DoNotExecuteReorg", Description = "Do not execute reorg, just create it." },
 			new VerbParameter { Name = "FailIfReorg", Description = "Generate, but do not make a build if a reorg is needed." },
-			new VerbParameter { Name = "CompileMains", Description = "Compile all main object, if false only compile the Developer Menu." },
+			new VerbParameter { Name = "CompileMains", Description = "Compile all main objects, if false only compile the Developer Menu." },
 			new VerbParameter { Name = "DetailedNavigation", Description = "Show detailed navigation." },
 		};
 
