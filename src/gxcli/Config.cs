@@ -71,7 +71,10 @@ namespace gxcli
 					if (typeof(IGXCliVerbProvider).IsAssignableFrom(t))
 					{
 						IGXCliVerbProvider obj = Activator.CreateInstance(t) as IGXCliVerbProvider;
-						ConfigProvider configProvider = new ConfigProvider(dllPath, t.FullName, obj);
+						ConfigProvider configProvider = new ConfigProvider(dllPath, t.FullName, obj)
+						{
+							HasValidator = typeof(ParameterValidator).IsAssignableFrom(t)
+						};
 						if (!s_instance.Providers.ContainsKey(obj.Name))
 						{
 							Console.WriteLine($"- {obj.Name}");

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="$(GX_PROGRAM_DIR)\GeneXus.Tasks.targets"/>
+	<Import Project="$(GX_PROGRAM_DIR)\Genexus.Server.Tasks.targets"/>
+	<Import Project="$(GX_PROGRAM_DIR)\GXtest.targets"/>
+
+	<PropertyGroup> <!--Input Parameters-->
+
+		<!-- Working KB Properties -->
+		<KBPath></KBPath>
+		<Version></Version>
+		<Environment></Environment>
+
+		<ExecutionDataFilePath>$(MSBuildThisFileDirectory)\gxtest.json</ExecutionDataFilePath>
+		<DetailedResults>false</DetailedResults>
+		<TestRunner Condition="'$(TestRunner)' == ''">Runner</TestRunner>
+		<TestResultsPath>$(MSBuildThisFileDirectory)\Tests</TestResultsPath>
+		<TestResultsFileName>TestResults.xml</TestResultsFileName>
+		<TestResultsFullPath>$(TestResultsPath)\$(TestResultsFileName)</TestResultsFullPath>
+
+	</PropertyGroup>
+
+	<Target Name="SelectVersion" Condition="'$(Version)'!=''" >
+		<SetActiveVersion VersionName="$(Version)"  />
+	</Target>
+
+	<Target Name="SelectEnvironment" Condition="'$(Environment)'!=''">
+		<SetActiveEnvironment EnvironmentName="$(Environment)" />
+	</Target>
+
+	<Target Name="OpenWorkingKB">
+		<OpenKnowledgeBase
+					Directory = "$(KBPath)"
+					DatabaseUser="$(DbaseServerUsername)"
+					DatabasePassword="$(DbaseServerPassword)"/>
+	</Target>
+
+	<Target Name="Open" DependsOnTargets="OpenWorkingKB;SelectVersion;SelectEnvironment"/>
+
+	<Target Name="SerilizeFile" Condition="'$(ObjectNames)' != ''">
+
+		<Message Text="TestType: $(TestType)" Importance="high"/>
+		
+		<WriteLinesToFile File="$(ExecutionDataFilePath)" Lines="{" Overwrite="true"/>
+		<WriteLinesToFile File="$(ExecutionDataFilePath)" Lines="&quot;$(TestType)&quot;:{" Overwrite="false"/>
+		<WriteLinesToFile File="$(ExecutionDataFilePath)" Lines="&quot;Tests&quot;:[ &quot;$(ObjectNames)&quot; ]" Overwrite="false"/>
+		<WriteLinesToFile File="$(ExecutionDataFilePath)" Lines="}" Overwrite="false"/>
+		<WriteLinesToFile File="$(ExecutionDataFilePath)" Lines="}" Overwrite="false"/>
+		
+	</Target>
+	
+	<Target Name="RunTests" DependsOnTargets="Open;SerilizeFile">
+		<UpdateTestRefs Condition="'$(ObjectNames)' == ''" ExecutionDataFilePath="$(ExecutionDataFilePath)" ServerUserName="$(ServerUsername)" ServerPassword="$(ServerPassword)"/>
+		<BuildOne BuildCalled="true" ObjectName="$(TestRunner)"/>
+		<RunTests Condition="'$(ObjectNames)' == ''" Type="$(TestType)" ServerUserName="$(ServerUsername)" ServerPassword="$(ServerPassword)"/>
+		<RunTestsList ContinueOnError="ErrorAndContinue" ExecutionDataFilePath="$(ExecutionDataFilePath)" DetailedResults="$(DetailedResults)" ServerUserName="$(ServerUsername)" ServerPassword="$(ServerPassword)"/>
+		<JUnitExportTests ServerUserName="$(ServerUsername)" ServerPassword="$(ServerPassword)">
+			<Output TaskParameter="JUnitTestFilePath" PropertyName="JUnitTestFilePathOutput"/>
+		</JUnitExportTests>
+		<Move SourceFiles="$(JUnitTestFilePathOutput)" DestinationFiles="$(TestResultsFullPath)"/>
+	</Target>
+
+</Project>

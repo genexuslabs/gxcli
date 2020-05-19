@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using common;
+using gxcli.common;
 
 namespace gxcli
 {
@@ -31,5 +32,8 @@ namespace gxcli
 		public string AssemblyLocation { get; set; }
 
 		public string ClassName { get; set; }
+
+		public bool HasValidator { get; set; }
+		
 	}
 }

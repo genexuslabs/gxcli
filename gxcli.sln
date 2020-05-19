@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamDev", "src\modules\Team
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPZ", "src\modules\XPZ\XPZ.csproj", "{EE1476FE-A9EE-4437-96F8-32ECA8A62B6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GXtest", "src\modules\GXtest\GXtest.csproj", "{1E5FDE8E-879B-4521-BDB4-4A39545ADD1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "src\modules\Test\Test.csproj", "{1E5FDE8E-879B-4521-BDB4-4A39545ADD1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

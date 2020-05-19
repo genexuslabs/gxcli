@@ -70,9 +70,31 @@ namespace gxcli
 				ThrowInvalidVerb(verb);
 
 			}
+			catch (ApplicationException aex)
+			{
+				Console.WriteLine(string.Empty);
+
+				string[] lines = aex.Message.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+				for (int i = 0; i < lines.Length; i++)
+				{
+					if (i == 0)
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine(lines[i]);
+						Console.ResetColor();
+					}
+					else
+						Console.WriteLine(lines[i]);
+				}
+
+			}
 			catch (Exception ex)
 			{
+				Console.WriteLine(string.Empty);
+
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(ex.Message);
+
 				Exception inner = ex.InnerException;
 #if DEBUG
 				Console.WriteLine(ex.StackTrace);
@@ -85,6 +107,7 @@ namespace gxcli
 #endif
 					inner = inner.InnerException;
 				}
+				Console.ResetColor();
 			}
 		}
 
@@ -110,9 +133,9 @@ namespace gxcli
 				}
 			}
 			msg.AppendLine("");
-			msg.AppendLine("See 'gx help'.");
+			msg.Append("See 'gx help'.");
 
-			throw new Exception(msg.ToString());
+			throw new ApplicationException(msg.ToString());
 		}
 
 		private static Dictionary<string, string> ParseArguments(IEnumerable<string> args)

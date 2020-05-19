@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using common;
+using gxcli.common;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
@@ -14,6 +16,8 @@ namespace gxcli
 		public static void Execute(ConfigProvider provider, Dictionary<string, string> props)
 		{
 			ValidateRequiredProperties(provider, props);
+			if (provider.HasValidator)
+				ValidateVerbSpecificParameters(provider, props);
 
 			List<ILogger> loggers = new List<ILogger>
 			{
@@ -98,6 +102,18 @@ namespace gxcli
 			{
 				if (param.Required && !props.ContainsKey(param.Name))
 					throw new MissingFieldException($"Missing required parameter:{param.Name}");
+			}
+		}
+
+		private static void ValidateVerbSpecificParameters(ConfigProvider provider, Dictionary<string, string> props)
+		{
+			Assembly ass = Assembly.LoadFrom(provider.AssemblyLocation);
+			Type t = ass.GetType(provider.ClassName);
+
+			if (t != null)
+			{
+				ParameterValidator validator = Activator.CreateInstance(t) as ParameterValidator;
+				validator.Validate(props);
 			}
 		}
 	}
