@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using gxcli.Misc;
@@ -35,8 +36,13 @@ namespace gxcli
 					}
 					if (string.IsNullOrEmpty(gxPath))
 					{
-						Console.WriteLine("You must enter the path to a valid GeneXus installation.");
-						gxPath = Console.ReadLine();
+						if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Config.GXENEXUS_EXE)))
+							gxPath = AppDomain.CurrentDomain.BaseDirectory;
+						else
+						{
+							Console.WriteLine("You must enter the path to a valid GeneXus installation.");
+							gxPath = Console.ReadLine();
+						}
 					}
 					Config.Install(gxPath);
 					return;

@@ -58,8 +58,25 @@ gx build kbpath=C:\Models\MyKB failIfReorg verbosity=minimal
 
 ## Installation
 Download the [latest release](https://github.com/genexuslabs/gxcli/releases/latest) and unzip the gxcli.zip file into any folder you wish.  
-Make sure you install the tool first by running `gx install <GeneXus Path>`. And that's it!
+Make sure you install the tool first by running `gx install <GeneXus Path>`. If you copy the gxcli in the same folder of a GeneXus installation, this installation will be used and there's no need to pass the `<Genexus Path>` argument.
 
+**Note:** GeneXus CLI currenty works only with [GeneXus Beta](http://genexus.com/beta). 
+
+## Build
+Clone this project and open a PowerShell window in that folder. Run the following command to build the solution.
+
+```ps
+dotnet build .\gxcli.sln
+```
+
+*You can also open the `gxcli.sln` solution in Visual Studio 2019 and build it from there.*
+
+The [deploy](.\deploy.ps1) script receives a path argument and will copy the artifacts to that folder.
+```powershell
+.\deploy.ps1 <gxcli path>
+```
+
+If you don't set a path argument, a `bin` folder will be created under this repository and the files will be copied there.
 
 ## GeneXus CLI Platform
 Want to create your own modules? Maybe you want to call your own extensions.  
@@ -133,4 +150,4 @@ Examples
         gx build kbpath=C:\Models\MyKB failIfReorg
 ```
 
-4 - Compile your module and that's it. In order to try it copy it into the `<GeneXus>\gxclimodules` folder with its .msbuild/.targets file. Run `gx install` so the *GeneXus CLI* can pick it up and have it available for future use.
+4 - Compile your module and that's it. In order to try it copy it into the `\gxclimodules` folder with its `.msbuild` or `.targets` file. Run `gx install` so the *GeneXus CLI* can pick it up and have it available for future use.
