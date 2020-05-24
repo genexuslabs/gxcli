@@ -65,13 +65,13 @@ Make sure you install the tool first by running `gx install <GeneXus Path>`. If 
 ## Build
 Clone this project and open a PowerShell window in that folder. Run the following command to build the solution.
 
-```ps
+```powershell
 dotnet build .\gxcli.sln
 ```
 
 *You can also open the `gxcli.sln` solution in Visual Studio 2019 and build it from there.*
 
-The [deploy](.\deploy.ps1) script receives a path argument and will copy the artifacts to that folder.
+The [deploy](./deploy.ps1) script receives a path argument and will copy the artifacts to that folder.
 ```powershell
 .\deploy.ps1 <gxcli path>
 ```
