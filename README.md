@@ -57,7 +57,7 @@ gx build kbpath=C:\Models\MyKB failIfReorg verbosity=minimal
 
 
 ## Installation
-Download the [latest release](https://github.com/sebagomez/gxcli/releases/latest) and unzip the gxcli.zip file into any folder you wish.  
+Download the [latest release](https://github.com/genexuslabs/gxcli/releases/latest) and unzip the gxcli.zip file into any folder you wish.  
 Make sure you install the tool first by running `gx install <GeneXus Path>`. And that's it!
 
 
