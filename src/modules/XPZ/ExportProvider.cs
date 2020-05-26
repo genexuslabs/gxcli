@@ -6,7 +6,7 @@ namespace XPZ
 {
 	public class ExportProvider : IGXCliVerbProvider
 	{
-		public string Name => "Export";
+		public string Name => "export";
 
 		public string Description => "Exports selected objects from the Knowledge Base to a file.";
 

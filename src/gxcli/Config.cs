@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 using common;
 using gxcli.common;
 using Newtonsoft.Json;
@@ -17,6 +20,8 @@ namespace gxcli
 		public Dictionary<string, ConfigProvider> Providers = new Dictionary<string, ConfigProvider>();
 
 		public string GeneXusPath { get; set; }
+		public string GeneXusVersion { get; set; }
+		public string CurrentVersion { get; set; }
 
 		private static string ConfigFilePath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, GXCLI_CONFIG);
 
@@ -28,10 +33,14 @@ namespace gxcli
 				if (s_instance == null)
 				{
 					if (!File.Exists(ConfigFilePath))
-						throw new ApplicationException("gxcli not installed or no modules found.");
+						throw new ApplicationException("gxcli not installed. Execute 'gx install <GeneXus Path>'");
 
 					s_instance = JsonConvert.DeserializeObject<Config>(File.ReadAllText(ConfigFilePath));
 				}
+
+				if (s_instance.CurrentVersion != Application.ProductVersion)
+					throw new ApplicationException("This is a newer version of gxcli. Execute 'gx install <GeneXus Path>'");
+
 				return s_instance;
 			}
 		}
@@ -48,9 +57,12 @@ namespace gxcli
 			if (!File.Exists(gxExe))
 				throw new Exception($"'{gxPath}' does not look like a valid GeneXus installation folder");
 
+			AssemblyInformationalVersionAttribute afv = Assembly.LoadFrom(gxExe).GetCustomAttribute<AssemblyInformationalVersionAttribute>();
 			s_instance = new Config
 			{
-				GeneXusPath = gxPath
+				GeneXusPath = gxPath,
+				GeneXusVersion = afv.InformationalVersion,
+				CurrentVersion = Application.ProductVersion
 			};
 
 			var dir = AppDomain.CurrentDomain.BaseDirectory;

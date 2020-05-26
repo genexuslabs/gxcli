@@ -6,7 +6,7 @@ namespace XPZ
 {
 	public class ImportProvider : IGXCliVerbProvider
 	{
-		public string Name => "Import";
+		public string Name => "import";
 
 		public string Description => "Imports an export file into the Knowledge Base.";
 

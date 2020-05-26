@@ -13,6 +13,8 @@ namespace gxcli.Misc
 
 		public static void ShowUsage(string selectedVerb = null)
 		{
+			Console.WriteLine($"GeneXus Path: {Config.Default.GeneXusPath}");
+			Console.WriteLine($"GeneXus Version: {Config.Default.GeneXusVersion}");
 			Console.WriteLine("");
 			Console.WriteLine($"Usage: gx {(string.IsNullOrEmpty(selectedVerb) ? "[command]" : selectedVerb.ToLower())} [parameters]|help [global options]");
 			Console.WriteLine("");

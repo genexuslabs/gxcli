@@ -13,6 +13,7 @@ namespace gxcli
 		const string INSTALL = "install";
 		const string HELP = "help";
 		const string VERSION = "version";
+		const string OPEN = "open";
 
 		static void Main(string[] args)
 		{
@@ -55,6 +56,13 @@ namespace gxcli
 				if (verb.Equals(VERSION, StringComparison.InvariantCultureIgnoreCase))
 				{
 					OutputHelper.PrintHeader();
+					return;
+				}
+				if (verb.Equals(OPEN, StringComparison.InvariantCultureIgnoreCase))
+				{
+					Process p = new Process();
+					p.StartInfo = new ProcessStartInfo(Path.Combine(Config.Default.GeneXusPath, Config.GXENEXUS_EXE), "/nolastkb");
+					p.Start();
 					return;
 				}
 
