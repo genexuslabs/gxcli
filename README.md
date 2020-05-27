@@ -12,6 +12,8 @@ Welcome to the cool new GeneXus CLI!
 
 We're excited to introduce *GeneXus CLI*, our next-generation command line tool for GeneXus.
 
+**Note:** GeneXus CLI currenty works only with [GeneXus Beta](http://genexus.com/beta). 
+
 ## Why a command line tool?
 
 We believe there are times where you want to perform some tasks in batch. Like firing a `Rebuild All` or a big `Update` from GXserver.
@@ -55,12 +57,11 @@ Global options are not specific to any command, it's a way of sending general pr
 gx build kbpath=C:\Models\MyKB failIfReorg verbosity=minimal
 ```
 
-
 ## Installation
 Download the [latest release](https://github.com/genexuslabs/gxcli/releases/latest) and unzip the gxcli.zip file into any folder you wish.  
 Make sure you install the tool first by running `gx install <GeneXus Path>`. If you copy the gxcli in the same folder of a GeneXus installation, this installation will be used and there's no need to pass the `<Genexus Path>` argument.
 
-**Note:** GeneXus CLI currenty works only with [GeneXus Beta](http://genexus.com/beta). 
+If you run *GeneXus CLI* from PowerShell you can have auto-completion of commands and their parameters. 
 
 ## Build
 Clone this project and open a PowerShell window in that folder. Run the following command to build the solution.
@@ -121,8 +122,8 @@ public class BuildProvider : IGXCliVerbProvider
 
   public List<Example> Examples => new List<Example>
   {
-    new Example{ Command = "gx build kbpath=C:\\Models\\MyKB forceRebuild", Description = "Rebulid All on your Knowledge Base" }, 
-    new Example{ Command = "gx build kbpath=C:\\Models\\MyKB failIfReorg", Description = "Bulid All on your Knowledge Base, but fail if a database reorganization is found" }
+    new Example{ Command = "gx build kbpath=C:\\Models\\MyKB forceRebuild", Description = "Rebuild All on your Knowledge Base" }, 
+    new Example{ Command = "gx build kbpath=C:\\Models\\MyKB failIfReorg", Description = "Build All on your Knowledge Base, but fail if a database reorganization is found" }
   };
 }
 ```
@@ -143,10 +144,10 @@ Parameters
     DetailedNavigation        : Show detailed navigation
 
 Examples
-    Rebulid All on your Knowledge Base
+    Rebuild All on your Knowledge Base
         gx build kbpath=C:\Models\MyKB forceRebuild
 
-    Bulid All on your Knowledge Base, but fail if a database reorganization is found
+    Build All on your Knowledge Base, but fail if a database reorganization is found
         gx build kbpath=C:\Models\MyKB failIfReorg
 ```
 
