@@ -23,8 +23,8 @@ namespace Build
 
 		public List<Example> Examples => new List<Example>
 		{
-			new Example{ Command = "gx build kbpath=C:\\Models\\MyKB forceRebuild", Description = "Rebulid All on your Knowledge Base" },
-			new Example{ Command = "gx build kbpath=C:\\Models\\MyKB failIfReorg", Description = "Bulid All on your Knowledge Base, but fail if a database reorganization is found" }
+			new Example{ Command = "gx build kbpath=C:\\Models\\MyKB forceRebuild", Description = "Rebuild All on your Knowledge Base" },
+			new Example{ Command = "gx build kbpath=C:\\Models\\MyKB failIfReorg", Description = "Build All on your Knowledge Base, but fail if a database reorganization is found" }
 		};
 	}
 }
