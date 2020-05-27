@@ -6,12 +6,13 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\MSBuild.exe",
+            "command": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe",
             "args": [
-                // Ask msbuild to generate full paths for file names.
+                "gxcli.sln",
                 "/property:GenerateFullPaths=true",
                 "/t:build",
-                "gxcli.sln",
+                "/p:Configuration=Debug",
+                //"/p:Platform=\"AnyCPU\"",
                 // Do not generate summary otherwise it leads to duplicate errors in Problems panel
                 "/consoleloggerparameters:NoSummary"
             ],

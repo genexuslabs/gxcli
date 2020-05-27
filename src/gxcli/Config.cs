@@ -4,9 +4,11 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 using common;
 using gxcli.common;
+using gxcli.Misc;
 using Newtonsoft.Json;
 
 namespace gxcli
@@ -99,6 +101,68 @@ namespace gxcli
 			}
 
 			s_instance.Save();
+
+			RegisterAutocomplete();
+		}
+
+		private static void RegisterAutocomplete()
+		{
+			Process p = Process.GetCurrentProcess();
+			PerformanceCounter parent = new PerformanceCounter("Process", "Creating Process ID", p.ProcessName);
+			int ppid = (int)parent.NextValue();
+
+			if (Process.GetProcessById(ppid).ProcessName != "powershell")
+				return;
+
+			Console.WriteLine("Generating powershell auto-complete script");
+			string psScript = Path.Combine(Application.StartupPath, "gxcli-autocomplete.ps1");
+
+			string header = @"$gxCompleter = {
+
+	param($wordToComplete, $commandAst, $cursorPosition)
+
+	$tokens = $commandAst.Extent.Text.Trim() -split '\s+'
+	$completions = switch ($tokens[1]) {
+";
+			string footer = @"
+	}
+
+	$completions | Where-Object {$_ -like ""${wordToComplete}*""} | ForEach-Object {
+		[System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+		}
+	}
+
+Register-ArgumentCompleter -CommandName gx -Native -ScriptBlock $gxCompleter";
+
+			StringBuilder def = new StringBuilder("\t\tdefault {");
+
+			StringBuilder builder = new StringBuilder();
+			foreach (string verb in Config.Default.Providers.Keys)
+			{
+				def.Append($"\"{verb}\",");
+				builder.Append($"\t\t'{verb}' {{");
+				foreach (var param in Config.Default.Providers[verb].Parameters)
+				{
+					builder.Append($"\"{param.Name}\",");
+				}
+				builder.Replace(",", ";", builder.Length - 1,1);
+				builder.AppendLine("break }");
+			}
+
+			foreach (var option in GlobalOption.GetAll())
+			{
+				def.Append($"\"{option.Name}\",");
+			}
+			def.Replace(",", "}", def.Length - 1, 1);
+
+
+			using (StreamWriter file = File.CreateText(psScript))
+			{
+				file.Write(header);
+				file.Write(builder.ToString());
+				file.Write(def.ToString());
+				file.Write(footer);
+			}
 		}
 
 		private void Save()
