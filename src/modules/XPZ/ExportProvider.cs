@@ -15,7 +15,7 @@ namespace XPZ
 		public List<VerbParameter> Parameters => new List<VerbParameter>(KBBasedVerbProvider.KBParameters)
 		{
 			new VerbParameter { Name = "FilePath", Description = "Full path to the file to import.", Required = true },
-			new VerbParameter { Name = "ObjectNames", Description = "Objects to be exported.", Required = true},
+			new VerbParameter { Name = "ObjectNames", Description = "Objects to be exported." },
 			new VerbParameter { Name = "ReferenceType", Description = "Specifies the type of reference between an object and the referenced by this one.(None|Minimal|Hard|All)" }
 		};
 
