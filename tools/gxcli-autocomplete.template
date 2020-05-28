@@ -4,8 +4,8 @@ $gxCompleter = {
 
 	$tokens = $commandAst.Extent.Text.Trim() -split '\s+'
 	$completions = switch ($tokens[1]) {
-		{{VERBS}}
-		{{DEFAULT}}
+{{VERBS}}
+{{DEFAULT}}
 	}
 
 	$completions | Where-Object {$_ -like "${wordToComplete}*"} | ForEach-Object {

@@ -14,28 +14,41 @@ if (-not (Test-Path $config)){
 $json = Get-Content $config | ConvertFrom-Json
 
 $verbs = @() 
-$def = "default {"
+$def = "`t`tdefault {"
 $json.Providers | Get-Member -MemberType NoteProperty | ForEach-Object {
     
     $key = $_.Name
     $verb = [PSCustomObject]@{Name = $key; Parameters = $json.Providers."$key".Parameters}
 
-    $line = "'" + $verb.Name + "' {"
-    $def +=  $verb.Name + ","
-    #Write-Host $line
+    $line = "`t`t'" + $verb.Name + "' {"
+    $def +=  "`"" + $verb.Name + "`","
 
     $verb.Parameters | ForEach-Object {
         $p = $_.Name
         $param = [PSCustomObject]@{Name = $p }
         $line += "`"" + $param.Name + "`"" + ","
-        #Write-Host $param.Name
     }
 
     $line = $line.Substring(0, $line.Length -1)
-    $line += ";break }"
+    $line += ";break }`r`n"
 
-    Write-Host $line
-    $verbs.Add($line)
+    $verbs += $line
 }
 
 $def = $def.Substring(0,$def.Length - 1)
+$def += "}"
+
+Write-Host $verbs
+Write-Host $def
+
+$templatePath = $gxcliPath + "\gxcli-autocomplete.template"
+$template = Get-Content $templatePath -Raw
+
+$template = $template.Replace("{{VERBS}}",$verbs)
+$template = $template.Replace("{{DEFAULT}}",$def)
+
+$outputPath = $gxcliPath + "\gxcli-autocomplete.ps1"
+
+Set-Content $outputPath $template
+
+Invoke-Expression -Command $outputPath

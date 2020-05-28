@@ -61,7 +61,16 @@ gx build kbpath=C:\Models\MyKB failIfReorg verbosity=minimal
 Download the [latest release](https://github.com/genexuslabs/gxcli/releases/latest) and unzip the gxcli.zip file into any folder you wish.  
 Make sure you install the tool first by running `gx install <GeneXus Path>`. If you copy the gxcli in the same folder of a GeneXus installation, this installation will be used and there's no need to pass the `<Genexus Path>` argument.
 
-If you run *GeneXus CLI* from PowerShell you can have auto-completion of commands and their parameters. 
+If you run *GeneXus CLI* from PowerShell you can have auto-completion of commands and their parameters.  
+After running the `install` command, execute the [`Generate-AutocompleteScript.ps1`](./tools/Generate-AutocompleteScript.ps1) script located where the *GeneXus CLI* was copied, as follows:
+
+```powershell
+.\Generate-AutocompleteScript.ps1
+```
+
+After executing the script you will have autocompletion support for commands and their parameters (only in Powershell).
+
+![](./res/Autocomplete.gif)
 
 ## Build
 Clone this project and open a PowerShell window in that folder. Run the following command to build the solution.

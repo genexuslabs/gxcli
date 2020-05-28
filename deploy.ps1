@@ -33,6 +33,9 @@ Write-Host Copying to $destination from $conf
 
 $gxclimodules = $destination + "\gxclimodules\"
 
+Write-Host Copying Powershell support
+Copy-Item -Path .\tools\*.* $destination
+
 Write-Host Copying gxcli
 Copy-Item -Path .\src\gxcli\bin\$conf\gx.* $destination
 
