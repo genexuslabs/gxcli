@@ -1,13 +1,7 @@
-param(
-    [Parameter(Mandatory=$true)]
-    [string]$gxcliPath
-
-)
-
-$config = $gxcliPath + "\gxcli.config"
+$config = "gxcli.config"
 
 if (-not (Test-Path $config)){
-    Write-Host "Config file was not found under $gxcliPath"
+    Write-Error Config file was not found
     return
 }
 
@@ -38,16 +32,12 @@ $json.Providers | Get-Member -MemberType NoteProperty | ForEach-Object {
 $def = $def.Substring(0,$def.Length - 1)
 $def += "}"
 
-Write-Host $verbs
-Write-Host $def
-
-$templatePath = $gxcliPath + "\gxcli-autocomplete.template"
-$template = Get-Content $templatePath -Raw
+$template = Get-Content gxcli-autocomplete.template -Raw
 
 $template = $template.Replace("{{VERBS}}",$verbs)
 $template = $template.Replace("{{DEFAULT}}",$def)
 
-$outputPath = $gxcliPath + "\gxcli-autocomplete.ps1"
+$outputPath = "gxcli-autocomplete.ps1"
 
 Set-Content $outputPath $template
 
