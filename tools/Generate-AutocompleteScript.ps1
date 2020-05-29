@@ -1,20 +1,20 @@
 $config = "gxcli.config"
 
 if (-not (Test-Path $config)){
-    Write-Error Config file was not found
+    Write-Host Config file was not found
     return
 }
 
 $json = Get-Content $config | ConvertFrom-Json
 
 $verbs = @() 
-$def = "`t`tdefault {"
+$def = "`t`tdefault {`"help`","
 $json.Providers | Get-Member -MemberType NoteProperty | ForEach-Object {
     
     $key = $_.Name
     $verb = [PSCustomObject]@{Name = $key; Parameters = $json.Providers."$key".Parameters}
 
-    $line = "`t`t'" + $verb.Name + "' {"
+    $line = "`t`t'" + $verb.Name + "' {`"help`","
     $def +=  "`"" + $verb.Name + "`","
 
     $verb.Parameters | ForEach-Object {
