@@ -60,6 +60,7 @@ namespace gxcli
 				}
 				if (verb.Equals(OPEN, StringComparison.InvariantCultureIgnoreCase))
 				{
+					Console.WriteLine($"Opening GeneXus from {Config.Default.GeneXusPath}");
 					Process p = new Process();
 					p.StartInfo = new ProcessStartInfo(Path.Combine(Config.Default.GeneXusPath, Config.GXENEXUS_EXE), "/nolastkb");
 					p.Start();
