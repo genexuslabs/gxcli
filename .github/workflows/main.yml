@@ -49,12 +49,12 @@ jobs:
     - name: Set the version environment variable
       run: |
         $file = ".\src\gxcli\bin\${env:Configuration}\gx.exe"
-        $env:GXCLI_VERSION = $(Get-Item $file).VersionInfo.ProductVersion
-        Write-Host GXCLI_VERSION $env:GXCLI_VERSION
-        echo "::set-env name=GXCLI_VERSION::$env:GXCLI_VERSION"
-        $env:TIMESTAMP = Get-Date -Format "yyyyMMddHHmmss"
-        Write-Host TIMESTAMP $env:TIMESTAMP
-        echo "::set-env name=TIMESTAMP::$env:TIMESTAMP"
+        $GXCLI_VERSION = $(Get-Item $file).VersionInfo.ProductVersion
+        Write-Host "[Value] GXCLI_VERSION=$GXCLI_VERSION"
+        echo "GXCLI_VERSION=$GXCLI_VERSION" >> $env:GITHUB_ENV
+        $TIMESTAMP = Get-Date -Format "yyyyMMddHHmmss"
+        Write-Host "[Value] TIMESTAMP=$TIMESTAMP"
+        echo "TIMESTAMP=$TIMESTAMP" >> $env:GITHUB_ENV
 
     - name: Deploy 
       run: .\deploy.ps1 .\bin\ ${env:Configuration}
