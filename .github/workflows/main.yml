@@ -8,11 +8,13 @@ on:
   push:
     branches: [ master ]
     paths:
+      - .github/workflows/main.yml
       - 'src/**'
       - 'tools/**'
   pull_request:
     branches: [ master ]
     paths:
+      - .github/workflows/main.yml
       - 'src/**'
       - 'tools/**'
 
